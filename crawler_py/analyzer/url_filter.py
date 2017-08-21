@@ -27,7 +27,7 @@ class URLFilter:
         return urls
 
     def _is_disallowed(self, url):
-        COLLECTION = 'disallow_link'
+        COLLECTION = 'disallow_links'
 
         url_split = split_url(url)
         disallow_links = db[COLLECTION].find(

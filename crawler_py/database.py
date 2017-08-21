@@ -16,12 +16,18 @@ def connect():
         client = MongoClient(MONGO['HOST'], MONGO['PORT'])
 
         client.server_info()
-        print_log("Connection successful")
 
         global db
-        db = client[MONGO['COLLECTION']]
+        db = client[MONGO['DATABASE']]
+
+        if 'USERNAME' in MONGO and 'PASSWORD' in MONGO:
+            db.authenticate(MONGO['USERNAME'], MONGO['PASSWORD'])
+
+        print_log("Connection successful")
 
     except FileNotFoundError:
         print_log(f"Database config not exists on `{DB_CONFIG_PATH}`", 'red')
+        exit(1)
     except errors.ServerSelectionTimeoutError:
         print_log("Connection Timeout. Please Try again", 'red')
+        exit(1)

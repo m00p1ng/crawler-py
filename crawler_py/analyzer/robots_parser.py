@@ -31,8 +31,7 @@ class RobotsParser:
         print_log(f"'{self.hostname}' disallow lists were added\n")
 
     def _save_disallow_link(self, resource):
-        COLLECTION = 'disallow_link'
-
+        COLLECTION = 'disallow_links'
         data = {
             "hostname": self.hostname,
             "resource": resource,
