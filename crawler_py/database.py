@@ -16,7 +16,7 @@ def connect():
         client = MongoClient(MONGO['HOST'], MONGO['PORT'])
 
         client.server_info()
-        print_log("Database has connected", 'green')
+        print_log("Connection successful")
 
         global db
         db = client[MONGO['COLLECTION']]
