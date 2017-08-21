@@ -1,6 +1,6 @@
-# Web Crawler
+# Crawler-py
 
-## Pre requirements
+## Pre Requirements
 * [Python](https://www.python.org) v3.6.2
 * [MongoDB](https://www.mongodb.com) v3.4.7
 

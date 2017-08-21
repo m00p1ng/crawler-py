@@ -1,0 +1,14 @@
+# VS Code config
+.vscode/
+
+# Python cached
+__pycache__/
+*.pyc
+*.pyo
+
+# VIM swap files
+*.swp
+*.swo
+
+# Database config
+db.json
