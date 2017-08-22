@@ -5,8 +5,8 @@ from ..utils import is_relative_path, print_log
 
 
 class URLExtractor:
-    def __init__(self, url, content):
-        self.url = url
+    def __init__(self, url_parse, content):
+        self.url_parse = url_parse
         self.content = content
 
     def extract_link(self):
@@ -27,7 +27,7 @@ class URLExtractor:
         for tag in results:
             link = tag[attribute]
             if is_relative_path(link):
-                link = urljoin(urlunparse(self.url), link)
+                link = urljoin(urlunparse(self.url_parse), link)
             links.append(link)
 
-        return links        
+        return links
