@@ -1,7 +1,7 @@
 import os
 
 # user agent for bot crawler
-SAVE_PATH = ''
+SAVE_ROOT = ''
 
 HEADER = {
     "User-agent": "m00p1ng130t",
@@ -34,10 +34,10 @@ EXTRACT_EXTENSIONS = [
     ".htm", ".html", ".xml", ".php", ".asp"
 ]
 
-if 'SAVE_PATH' not in globals() or SAVE_PATH == '':
-    SAVE_PATH = os.path.join(os.path.expanduser('~'), 'Documents', 'html')
+if 'SAVE_PATH' not in globals() or SAVE_ROOT == '':
+    SAVE_ROOT = os.path.join(os.path.expanduser('~'), 'Documents', 'html')
 else:
-    SAVE_PATH = os.path.join(SAVE_PATH, 'html')
+    SAVE_ROOT = os.path.join(SAVE_ROOT, 'html')
 
-if not os.path.exists(SAVE_PATH):
-    os.makedirs(SAVE_PATH)
+if not os.path.exists(SAVE_ROOT):
+    os.makedirs(SAVE_ROOT)

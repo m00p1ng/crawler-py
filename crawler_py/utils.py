@@ -33,14 +33,20 @@ def is_relative_path(url):
 def split_url(url):
     url_parse = urlparse(url)
     hostname = url_parse.netloc
-    resource = url_parse.path
 
-    if url_parse.params:
-        resource += f';{url_parse.params}'
-    if url_parse.query:
-        resource += f'?{url_parse.query}'
-    if url_parse.fragment:
-        resource += f'#{url_parse.fragment}'
+    resource = url_parse.path
+    resource = join_modifier_url(resource, url_parse)
 
     split_result = namedtuple('SplitResult', ['hostname', 'resource'])
     return split_result(hostname=hostname, resource=resource)
+
+
+def join_modifier_url(source, url_parse):
+    result = source
+    if url_parse.params:
+        result += f';{url_parse.params}'
+    if url_parse.query:
+        result += f'?{url_parse.query}'
+    if url_parse.fragment:
+        result += f'#{url_parse.fragment}'
+    return result
