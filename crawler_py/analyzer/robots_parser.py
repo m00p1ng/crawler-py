@@ -1,7 +1,7 @@
 import re
 
 from ..utils import print_log
-from ..database import db
+from .. import database as db
 
 
 class RobotsParser:
@@ -32,10 +32,9 @@ class RobotsParser:
         print_log(f"'{self.hostname}' disallow lists were added\n")
 
     def _save_disallow_link(self, resource):
-        COLLECTION = 'disallow_links'
         data = {
             "hostname": self.hostname,
             "resource": resource,
         }
-        if not db[COLLECTION].find_one(data):
-            db[COLLECTION].insert(data)
+        if not db.disallow_links.find_one(data):
+            db.disallow_links.insert(data)

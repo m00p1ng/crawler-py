@@ -1,8 +1,9 @@
 # Crawler-py
+The web crawler with python
 
-## Pre Requirements
-* [Python](https://www.python.org) v3.6.2
-* [MongoDB](https://www.mongodb.com) v3.4.7
+## Requirements
+* [Python](https://www.python.org) v3.6 or greater
+* [MongoDB](https://www.mongodb.com) v3.4 or greater
 
 ## Python Dependencies
 * [Beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) v4.6.0

@@ -2,7 +2,7 @@ import re
 from urllib.parse import urljoin
 
 from ..utils import print_log, split_url
-from ..database import db
+from .. import database as db
 
 
 class URLFilter:
@@ -27,10 +27,8 @@ class URLFilter:
         return urls
 
     def _is_disallowed(self, url):
-        COLLECTION = 'disallow_links'
-
         url_split = split_url(url)
-        disallow_links = db[COLLECTION].find(
+        disallow_links = db.disallow_links.find(
             {"hostname": url_split.hostname},
             {"resource": 1, "_id": 0}
         )
@@ -43,12 +41,10 @@ class URLFilter:
         return False
 
     def filter_duplicated(self):
-        COLLECTION = 'queue_links'
-
         urls = []
         for url in self.urls:
             url_split = split_url(url)
-            result = db[COLLECTION].find_one({
+            result = db.queue.find_one({
                 "hostname": url_split.hostname,
                 "resource": url_split.resource,
             })
