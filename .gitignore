@@ -12,6 +12,3 @@ __pycache__/
 
 # Database config
 db.json
-
-# Test folder
-/tests/

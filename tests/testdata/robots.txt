@@ -1,0 +1,6 @@
+# Commment ngai
+User-agent: m00p1ng130t
+Disallow: *
+
+User-agent: *
+Disallow: /search
