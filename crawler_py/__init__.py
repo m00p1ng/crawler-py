@@ -1,6 +1,8 @@
 import sys
+
 from .utils import print_log
 from .database import Database
+from .settings import DATABASE_NAME
 
 
 def print_header():
@@ -20,4 +22,4 @@ def main():
         exit(1)
 
     db = Database()
-    db.connect()
+    db.connect(DATABASE_NAME)

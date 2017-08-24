@@ -4,6 +4,7 @@ from collections import namedtuple
 from .settings import SAVE_ROOT
 from .utils import join_modifier_url
 
+
 def save(url_parse, content):
     filepath = _parse_to_path(url_parse)
     save_path = os.path.join(SAVE_ROOT, url_parse.netloc, filepath.path)
@@ -14,6 +15,7 @@ def save(url_parse, content):
     file_save_path = os.path.join(save_path, filepath.filename)
     with open(file_save_path, 'wb') as file:
         file.write(content)
+
 
 def _parse_to_path(url_parse):
     filepath = namedtuple('FilePath', ['path', 'filename'])

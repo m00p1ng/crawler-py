@@ -5,7 +5,7 @@ from crawler_py.database import Database
 
 class TestDatabase(unittest.TestCase):
     def test_connection(self):
-        db = Database.connect()
+        db = Database.connect('test_crawler')
         self.assertIsNotNone(db)
 
 

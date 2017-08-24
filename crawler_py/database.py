@@ -3,7 +3,7 @@ import json
 from pymongo import MongoClient, errors
 
 from .utils import print_log
-from .settings import DB_CONFIG_PATH
+from .settings import DATABASE_CONFIG_PATH
 
 
 class Database:
@@ -13,16 +13,16 @@ class Database:
     _client = None
 
     @classmethod
-    def connect(cls):
+    def connect(cls, db_name):
         try:
-            with open(DB_CONFIG_PATH, 'r') as file:
+            with open(DATABASE_CONFIG_PATH, 'r') as file:
                 MONGO = json.loads(file.read())
 
             print_log("Connecting to database...")
             cls._client = MongoClient(MONGO['HOST'], MONGO['PORT'])
             cls._client.server_info()
 
-            db = cls._client[MONGO['DATABASE']]
+            db = cls._client[db_name]
             if 'USERNAME' in MONGO and 'PASSWORD' in MONGO:
                 db.authenticate(MONGO['USERNAME'], MONGO['PASSWORD'])
 
@@ -33,7 +33,7 @@ class Database:
 
         except FileNotFoundError:
             print_log(
-                f"Database config not exists on `{DB_CONFIG_PATH}`", 'red')
+                f"Database config not exists on `{DATABASE_CONFIG_PATH}`", 'red')
             exit(1)
         except errors.ServerSelectionTimeoutError:
             print_log("Connection Timeout. Please Try again", 'red')
