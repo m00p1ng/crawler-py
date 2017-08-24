@@ -3,7 +3,7 @@ from urllib.parse import urlunparse
 from datetime import datetime
 
 from ..utils import print_log, split_url
-from .. import database as db
+from ..database import Database as db
 
 
 class ContentFilter:

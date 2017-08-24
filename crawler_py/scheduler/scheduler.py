@@ -1,6 +1,6 @@
 from urllib.parse import urljoin
 
-from .. import database as db
+from ..database import Database as db
 from ..utils import print_log
 
 
@@ -13,7 +13,7 @@ class Scheduler:
 
     def _get_queue(self, limit):
         urls = db.queue.find(
-            find_val={"visited": False},
+            find_params={"visited": False},
             return_field={'hostname': 1, 'resource': 1, '_id': 0},
             limit=limit
         )

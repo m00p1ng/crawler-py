@@ -3,6 +3,8 @@ import os
 # user agent for bot crawler
 SAVE_ROOT = ''
 
+DB_CONFIG_PATH = os.path.realpath('db.json')
+
 HEADER = {
     "User-agent": "m00p1ng130t",
 }

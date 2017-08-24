@@ -11,12 +11,9 @@ hostname_ip = {}
 link_counter = 0
 
 
-def time_stamp():
-    return datetime.now().strftime('%d-%m-%yT%H:%M:%S')
-
-
 def print_log(text, color='white'):
-    return print(colored(f"[{time_stamp()}]  {text}", color))
+    timestamp = datetime.now().strftime('%d-%m-%yT%H:%M:%S')
+    print(colored(f"[{timestamp}]  {text}", color))
 
 
 def fill_http_prefix(url):

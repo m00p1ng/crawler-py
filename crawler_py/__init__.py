@@ -1,5 +1,6 @@
 import sys
 from .utils import print_log
+from .database import Database
 
 
 def print_header():
@@ -14,6 +15,9 @@ def print_header():
 def main():
     if sys.version_info >= (3, 6):
         print_header()
-        from . import database
     else:
-        print_log("Please upgrade your python to version 3.6 or greater", 'red')
+        print_log("Please upgrade python to version 3.6 or greater", 'red')
+        exit(1)
+
+    db = Database()
+    db.connect()

@@ -1,7 +1,7 @@
 import re
 
 from ..utils import print_log
-from .. import database as db
+from ..database import Database as db
 
 
 class RobotsParser:
