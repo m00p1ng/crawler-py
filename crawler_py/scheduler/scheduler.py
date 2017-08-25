@@ -18,4 +18,4 @@ class Scheduler:
             limit=limit
         )
 
-        return [urljoin(url.hostname, url.resource) for url in urls]
+        return [urljoin(url['hostname'], url['resource']) for url in urls]

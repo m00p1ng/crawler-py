@@ -3,6 +3,7 @@ import os
 SAVE_ROOT = ''
 
 DATABASE_CONFIG_PATH = os.path.realpath('db.json')
+
 DATABASE_NAME = 'crawler-py'
 
 HEADER = {

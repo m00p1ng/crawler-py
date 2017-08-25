@@ -1,7 +1,7 @@
 import os
 from collections import namedtuple
 
-from .settings import SAVE_ROOT
+from .settings import SAVE_ROOT, EXTRACT_EXTENSIONS
 from .utils import join_modifier_url
 
 
@@ -13,7 +13,13 @@ def save(url_parse, content):
         os.makedirs(save_path)
 
     file_save_path = os.path.join(save_path, filepath.filename)
-    with open(file_save_path, 'wb') as file:
+
+    if _check_extension(filepath.filename):
+        mode = 'w'
+    else:
+        mode = 'wb'
+
+    with open(file_save_path, mode) as file:
         file.write(content)
 
 
@@ -29,3 +35,10 @@ def _parse_to_path(url_parse):
         path = os.path.join(*path)
 
     return filepath(path=path, filename=filename)
+
+def _check_extension(filename):
+    extension = os.path.splitext(filename)[1]
+    if extension in EXTRACT_EXTENSIONS or extension is '':
+        return True
+    else:
+        return False

@@ -57,8 +57,8 @@ class _Collection:
     def __init__(self, db, name):
         self.db = db[name]
 
-    def insert(self, data):
-        return self.db.insert(data)
+    def insert_one(self, data):
+        return self.db.insert_one(data)
 
     def find(self, find_params={}, return_field=None, limit=0):
         return self.db.find(find_params, return_field).limit(limit)
