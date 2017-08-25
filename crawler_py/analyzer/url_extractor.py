@@ -1,5 +1,5 @@
-from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlunparse
+from bs4 import BeautifulSoup
 
 from ..utils import is_relative_path, print_log
 
@@ -15,8 +15,8 @@ class URLExtractor:
         soup = BeautifulSoup(self.content, 'html.parser')
 
         links += self._find_tag(soup, 'a', 'href')
-        links += self._find_tag(soup, 'img', 'src')
-        links += self._find_tag(soup, 'frame', 'src')
+        # links += self._find_tag(soup, 'img', 'src')
+        # links += self._find_tag(soup, 'frame', 'src')
 
         return links
 
