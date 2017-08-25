@@ -1,14 +1,8 @@
 import re
 from datetime import datetime
+from collections import namedtuple
 from urllib.parse import urlparse
 from termcolor import colored
-from collections import namedtuple
-
-# dictionary for map hostname to ip address
-hostname_ip = {}
-
-# counter for downloaded link
-link_counter = 0
 
 
 def print_log(text, color='white'):
