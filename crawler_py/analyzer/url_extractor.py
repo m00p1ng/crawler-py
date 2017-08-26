@@ -1,5 +1,5 @@
 import re
-from urllib.parse import urljoin, urlunparse, urlparse
+from urllib.parse import urljoin, urlunparse, urlparse, unquote
 from bs4 import BeautifulSoup
 
 from ..utils import is_relative_path, print_log, split_url
@@ -30,7 +30,7 @@ class URLExtractor:
 
         for tag in results:
             if tag.has_attr(attribute):
-                url = tag[attribute]
+                url = unquote(tag[attribute])
                 if is_relative_path(url):
                     url = urljoin(urlunparse(self.url_parse), url)
                 if (self._is_under_seed_root(url) and self._is_lower_max_level(url) and

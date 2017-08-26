@@ -29,10 +29,10 @@ class Fetcher:
         except requests.ConnectionError:
             print_log(f"Cannot GET content from {self.url}", 'red')
             self._update_visited_link()
-            return ''
+            return None
         except PageNotFound:
             print_log(f"Not Found Page '{self.url}'", 'red')
-            return ''
+            return None
 
     def _update_visited_link(self):
         url_split = split_url(self.url)

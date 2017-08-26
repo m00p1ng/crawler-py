@@ -3,7 +3,7 @@ import time
 
 from .utils import print_log, fill_http_prefix
 from .database import Database as db
-from .settings import DATABASE_NAME, SEED_HOSTNAME, LIMIT_SITE
+from .settings import DATABASE_NAME, SEED_HOSTNAME, LIMIT_SITE, DELAY_FETCH
 
 from .analyzer import Analyzer
 from .downloader import Downloader
@@ -44,11 +44,13 @@ def crawler():
         downloader = Downloader(url)
         content = downloader.start()
 
-        analyzer = Analyzer(url, content)
-        urls = analyzer.start()
+        if content is not None:
+            analyzer = Analyzer(url, content)
+            urls = analyzer.start()
 
-        schedule.add(urls)
-        time.sleep(0.5)
+            schedule.add(urls)
+
+        time.sleep(DELAY_FETCH)
     print_log("Finish crawler", 'green')
 
 

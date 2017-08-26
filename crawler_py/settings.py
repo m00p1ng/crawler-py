@@ -8,6 +8,7 @@ SEED_URL = 'http://ku.ac.th'
 LIMIT_SITE = 10000
 MAX_LEVEL = 10
 REQUEST_TIMEOUT = 5
+DELAY_FETCH = 0.5
 
 DATABASE_CONFIG_PATH = os.path.realpath('db.json')
 DATABASE_NAME = 'crawler-py'
