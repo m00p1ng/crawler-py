@@ -7,9 +7,40 @@ from .settings import DATABASE_CONFIG_PATH
 
 
 class Database:
+    '''
+    --------------------
+     Collection: queue
+     :attribute
+        * hostname
+        * resource
+        * visited
+    --------------------
+     Collection: content
+     :attribute
+        * hostname
+        * resource
+        * is_duplicated
+        * timestamp
+        * hash
+    --------------------
+     Collection: disallow_link
+     :attribute
+        * hostname
+        * resource
+    --------------------
+     Collection: host_info
+     :attribute
+        * hostname
+        * ip_addr
+        * has_robots
+        * downloaded_robots
+    --------------------
+    '''
+
     queue = None
     content = None
     disallow_links = None
+    host_info = None
     _client = None
 
     @classmethod
@@ -44,6 +75,7 @@ class Database:
         cls.queue = _Collection(db, 'queue_links')
         cls.content = _Collection(db, 'content_info')
         cls.disallow_links = _Collection(db, 'disallow_links')
+        cls.host_info = _Collection(db, 'host_info')
 
     @classmethod
     def disconnect(cls):
@@ -65,3 +97,6 @@ class _Collection:
 
     def find_one(self, find_params={}, return_field=None):
         return self.db.find_one(find_params, return_field)
+
+    def update_one(self, find_params, update):
+        return self.db.update_one(find_params, update)
