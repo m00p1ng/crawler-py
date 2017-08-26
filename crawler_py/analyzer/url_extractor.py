@@ -33,7 +33,8 @@ class URLExtractor:
                 url = tag[attribute]
                 if is_relative_path(url):
                     url = urljoin(urlunparse(self.url_parse), url)
-                if self._is_under_seed_root(url) and self._is_lower_max_level(url):
+                if (self._is_under_seed_root(url) and self._is_lower_max_level(url) and
+                        not self._is_long_filename(url)):
                     urls.append(url)
                     if DEBUG:
                         print_log(f"Found '{url}'", 'cyan')
@@ -48,7 +49,7 @@ class URLExtractor:
         pattern = r'.*?window\.location\s*=\s*\"([^"]+)\"'
         redirMatch = re.match(pattern, str(soup), re.M | re.S)
 
-        if(redirMatch and "http" in redirMatch.group(1)):
+        if redirMatch and "http" in redirMatch.group(1):
             url = redirMatch.group(1)
             if DEBUG:
                 print_log(f"Found '{url}'", 'cyan')
@@ -61,3 +62,10 @@ class URLExtractor:
         level = url_split.resource.split('/')
 
         return len(level) < MAX_LEVEL
+
+    def _is_long_filename(self, url):
+        url_split = split_url(url)
+        if len(url_split.resource) > 255:
+            print_log(f"Skip URL {url}", 'yellow')
+            return True
+        return False

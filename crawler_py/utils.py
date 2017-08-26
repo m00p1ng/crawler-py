@@ -9,7 +9,7 @@ from .settings import EXTRACT_EXTENSIONS
 
 
 def print_log(text, color='white'):
-    timestamp = datetime.now().strftime('%d-%m-%yT%H:%M:%S')
+    timestamp = datetime.now().strftime('%d-%m-%yT%H:%M:%S.%f')[:-3]
     print(colored(f"[{timestamp}]  {text}", color))
 
 

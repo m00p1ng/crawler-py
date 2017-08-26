@@ -18,8 +18,9 @@ class ContentFilter:
 
         if not db.content.find_one({"hash": hash_}):
             self._save_hash(hash_, False)
+            print_log(f"Added hash to database")
             storage.save(url, self.content)
-            print_log(f"Added hash of '{url}' to database")
+            print_log(f"Stored '{url}'")
         else:
             self._save_hash(hash_, True)
             print_log(f"Duplicated Content '{url}'", 'yellow')

@@ -24,8 +24,7 @@ class Fetcher:
                 raise PageNotFound
 
             self._update_link_counter(link_counter_id)
-
-            print_log(f"Stored '{self.url}'")
+            print_log(f"GET content successful")
             return res.text
         except requests.ConnectionError:
             print_log(f"Cannot GET content from {self.url}", 'red')

@@ -32,14 +32,16 @@ def _remove_www(url):
         return result.group(2)
     return url
 
+
 def _check_filepath_exist(save_path, pure_filename, url_parse):
     save_filename = join_modifier_url(pure_filename, url_parse)
     save_filename = save_filename.replace('/', '-')
 
     file_save_path = os.path.join(save_path, save_filename)
-    if os.path.exists(file_save_path):
+    if os.path.exists(file_save_path) and os.path.isdir(file_save_path):
         return os.path.join(file_save_path, 'index.html')
     return file_save_path
+
 
 def _create_dir_name(save_path):
     if not os.path.exists(save_path):
