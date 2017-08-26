@@ -1,8 +1,11 @@
 import re
+import os
 from datetime import datetime
 from collections import namedtuple
 from urllib.parse import urlparse
 from termcolor import colored
+
+from .settings import EXTRACT_EXTENSIONS
 
 
 def print_log(text, color='white'):
@@ -41,3 +44,25 @@ def join_modifier_url(source, url_parse):
     if url_parse.fragment:
         result += f'#{url_parse.fragment}'
     return result
+
+
+def url_to_path(url_parse):
+    filepath = namedtuple('FilePath', ['path', 'filename'])
+    if url_parse.path in ['/', '']:
+        filename = join_modifier_url('index.html', url_parse)
+        path = ''
+    else:
+        filename = url_parse.path.split('/')[-1]
+        filename = join_modifier_url(filename, url_parse)
+        path = url_parse.path.split('/')[:-1]
+        path = os.path.join(*path)
+
+    return filepath(path=path, filename=filename)
+
+
+def check_extension(filename):
+    extension = os.path.splitext(filename)[1]
+    if extension in EXTRACT_EXTENSIONS or extension is '':
+        return True
+    else:
+        return False

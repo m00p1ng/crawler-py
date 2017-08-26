@@ -2,6 +2,7 @@ import hashlib
 from urllib.parse import urlunparse
 from datetime import datetime
 
+from .. import storage
 from ..utils import print_log, split_url
 from ..database import Database as db
 
@@ -17,6 +18,7 @@ class ContentFilter:
 
         if not db.content.find_one({"hash": hash_}):
             self._save_hash(hash_, False)
+            storage.save(self.url_parse, self.content)
             print_log(f"Added hash of '{url}' to database")
         else:
             self._save_hash(hash_, True)

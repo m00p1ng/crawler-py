@@ -2,6 +2,8 @@ import os
 
 SAVE_ROOT = ''
 
+SEED_URL = 'ku.ac.th'
+
 DATABASE_CONFIG_PATH = os.path.realpath('db.json')
 
 DATABASE_NAME = 'crawler-py'
