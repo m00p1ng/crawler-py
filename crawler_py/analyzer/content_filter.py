@@ -13,17 +13,18 @@ class ContentFilter:
 
     def filter_duplicated(self):
         hash_ = hashlib.sha224(self.content.encode('utf-8')).hexdigest()
+        url = urlunparse(self.url_parse)
+
         if not db.content.find_one({"hash": hash_}):
             self._save_hash(hash_, False)
-            print_log(f"Added content of `{urlunparse(self.url_parse)}` to database")
+            print_log(f"Added hash of '{url}' to database")
         else:
             self._save_hash(hash_, True)
-            print_log(
-                f"Content of `{urlunparse(self.url_parse)}` is duplicated", 'yellow')
+            print_log(f"Content of '{url}' is duplicated", 'yellow')
 
     def _save_hash(self, hash_, is_duplicated):
         url = split_url(self.url_parse.geturl())
-        result = db.content.insert({
+        result = db.content.insert_one({
             "hostname": url.hostname,
             "resource": url.resource,
             "is_duplicated": is_duplicated,
