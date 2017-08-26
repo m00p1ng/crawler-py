@@ -1,8 +1,12 @@
 import sys
 
-from .utils import print_log
+from .utils import print_log, fill_http_prefix
 from .database import Database
-from .settings import DATABASE_NAME
+from .settings import DATABASE_NAME, SEED_URL
+
+from .analyzer import Analyzer
+from .downloader import Downloader
+from .scheduler import Scheduler
 
 
 def print_header():
@@ -23,3 +27,7 @@ def main():
 
     db = Database()
     db.connect(DATABASE_NAME)
+    crawler()
+
+def crawler():
+    pass

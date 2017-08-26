@@ -1,8 +1,7 @@
 import os
+from urllib.parse import urlparse
 
-SAVE_ROOT = ''
-
-SEED_URL = 'ku.ac.th'
+SEED_URL = 'http://ku.ac.th'
 
 DATABASE_CONFIG_PATH = os.path.realpath('db.json')
 
@@ -16,10 +15,15 @@ EXTRACT_EXTENSIONS = [
     ".htm", ".html", ".xml", ".php", ".asp"
 ]
 
-if 'SAVE_ROOT' not in globals() or SAVE_ROOT == '':
+# set default value
+if 'SAVE_ROOT' not in globals():
+    SAVE_ROOT = os.path.join(os.path.expanduser('~'), 'Documents', 'html')
+elif SAVE_ROOT == '':
     SAVE_ROOT = os.path.join(os.path.expanduser('~'), 'Documents', 'html')
 else:
     SAVE_ROOT = os.path.join(SAVE_ROOT, 'html')
 
 if not os.path.exists(SAVE_ROOT):
     os.makedirs(SAVE_ROOT)
+
+SEED_HOSTNAME = urlparse(SEED_URL).netloc

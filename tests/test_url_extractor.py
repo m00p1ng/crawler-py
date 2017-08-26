@@ -16,7 +16,8 @@ class TestURLExtractor(unittest.TestCase):
             content = file.read()
 
         url_parse = urlparse('http://example.com/test/path/content')
-        ue = URLExtractor(url_parse, content)
+        ROOT = 'example.com'
+        ue = URLExtractor(url_parse, content, ROOT)
         links = ue.extract_link()
 
         expect_links = [
