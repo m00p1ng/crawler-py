@@ -33,8 +33,10 @@ class RobotsParser:
             i += 1
         return resources
 
-    def save(self, resources):
+    def save(self, resources=None):
         print_log(f"Adding '{self.hostname}' disallow lists")
+        if resources is None:
+            resources = self.resources
 
         for resource in resources:
             data = {
