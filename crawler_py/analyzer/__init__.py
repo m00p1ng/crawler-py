@@ -5,6 +5,7 @@ from .robots_parser import RobotsParser
 from .url_extractor import URLExtractor
 from .url_filter import URLFilter
 from ..utils import url_to_path, check_extension
+from ..settings import SEED_HOSTNAME
 
 
 class Analyzer:
@@ -21,7 +22,7 @@ class Analyzer:
         cf.filter_duplicated()
 
     def _url_analyzer(self):
-        ue = URLExtractor(self.url_parse, self.content)
+        ue = URLExtractor(self.url_parse, self.content, SEED_HOSTNAME)
         urls = ue.extract_link()
 
         urls = [url for url in urls if self._filter_extension(url)]
