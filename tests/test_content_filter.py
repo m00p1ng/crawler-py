@@ -16,7 +16,6 @@ class TestContentFilter(unittest.TestCase):
         self.addContent(url)
 
     def addContent(self, url):
-        print(url)
         current_path = os.getcwd()
         test_data_path = os.path.join(
             current_path, 'tests', 'testdata', 'robots.txt'

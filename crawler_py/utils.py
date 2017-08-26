@@ -46,11 +46,17 @@ def join_modifier_url(source, url_parse):
     return result
 
 
-def url_to_path(url_parse):
+def url_to_path(url):
     filepath = namedtuple('FilePath', ['path', 'filename'])
+    url_parse = urlparse(url)
+
     if url_parse.path in ['/', '']:
         filename = join_modifier_url('index.html', url_parse)
         path = ''
+    elif len(url_parse.path) > 0 and url_parse.path[-1] == '/':
+        filename = join_modifier_url('index.html', url_parse)
+        path = url_parse.path.rstrip('/').split('/')
+        path = os.path.join(*path)
     else:
         filename = url_parse.path.split('/')[-1]
         filename = join_modifier_url(filename, url_parse)

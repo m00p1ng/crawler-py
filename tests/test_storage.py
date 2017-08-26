@@ -16,9 +16,11 @@ class TestStorage(unittest.TestCase):
 
         with open(test_data_path, 'r') as file:
             test_data = file.read()
-        url_parse = urlparse('http://example.com/hello/world')
 
-        storage.save(url_parse, test_data)
+        url = 'http://example.com/hello/world'
+        url_parse = urlparse(url)
+
+        storage.save(url, test_data)
 
         test_save_path = os.path.join(SAVE_ROOT, url_parse.netloc, 'hello', 'world')
         self.assertTrue(os.path.exists(test_save_path))

@@ -1,10 +1,15 @@
 import os
 from urllib.parse import urlparse
 
+DEBUG = False
+
 SEED_URL = 'http://ku.ac.th'
 
-DATABASE_CONFIG_PATH = os.path.realpath('db.json')
+LIMIT_SITE = 10000
+MAX_LEVEL = 10
+REQUEST_TIMEOUT = 5
 
+DATABASE_CONFIG_PATH = os.path.realpath('db.json')
 DATABASE_NAME = 'crawler-py'
 
 HEADER = {

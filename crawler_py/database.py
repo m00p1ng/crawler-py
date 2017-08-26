@@ -1,4 +1,3 @@
-import os
 import json
 from pymongo import MongoClient, errors
 
@@ -14,6 +13,7 @@ class Database:
         * hostname
         * resource
         * visited
+
     --------------------
      Collection: content
      :attribute
@@ -22,11 +22,13 @@ class Database:
         * is_duplicated
         * timestamp
         * hash
+
     --------------------
      Collection: disallow_link
      :attribute
         * hostname
         * resource
+
     --------------------
      Collection: host_info
      :attribute
@@ -34,6 +36,12 @@ class Database:
         * ip_addr
         * has_robots
         * downloaded_robots
+
+    --------------------
+     Collection: crawler_state
+     :attribute
+        * link_count
+
     --------------------
     '''
 
@@ -41,6 +49,7 @@ class Database:
     content = None
     disallow_links = None
     host_info = None
+    crawler_state = None
     _client = None
 
     @classmethod
@@ -76,6 +85,7 @@ class Database:
         cls.content = _Collection(db, 'content_info')
         cls.disallow_links = _Collection(db, 'disallow_links')
         cls.host_info = _Collection(db, 'host_info')
+        cls.crawler_state = _Collection(db, 'crawler_state')
 
     @classmethod
     def disconnect(cls):
@@ -92,11 +102,17 @@ class _Collection:
     def insert_one(self, data):
         return self.db.insert_one(data)
 
-    def find(self, find_params={}, return_field=None, limit=0):
+    def insert_many(self, data):
+        return self.db.insert_many(data)
+
+    def find(self, find_params=None, return_field=None, limit=0):
         return self.db.find(find_params, return_field).limit(limit)
 
-    def find_one(self, find_params={}, return_field=None):
+    def find_one(self, find_params=None, return_field=None):
         return self.db.find_one(find_params, return_field)
 
     def update_one(self, find_params, update):
         return self.db.update_one(find_params, update)
+
+    def count(self):
+        return self.db.count()

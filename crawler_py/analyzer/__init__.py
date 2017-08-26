@@ -1,4 +1,5 @@
 import os
+from urllib.parse import urlparse
 
 from .content_filter import ContentFilter
 from .robots_parser import RobotsParser
@@ -9,8 +10,9 @@ from ..settings import SEED_HOSTNAME
 
 
 class Analyzer:
-    def __init__(self, url_parse, content):
-        self.url_parse = url_parse
+    def __init__(self, url, content):
+        self.url = url
+        self.url_parse = urlparse(url)
         self.content = content
 
     def start(self):

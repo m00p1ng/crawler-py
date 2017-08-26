@@ -18,11 +18,11 @@ class ContentFilter:
 
         if not db.content.find_one({"hash": hash_}):
             self._save_hash(hash_, False)
-            storage.save(self.url_parse, self.content)
+            storage.save(url, self.content)
             print_log(f"Added hash of '{url}' to database")
         else:
             self._save_hash(hash_, True)
-            print_log(f"Content of '{url}' is duplicated", 'yellow')
+            print_log(f"Duplicated Content '{url}'", 'yellow')
 
     def _save_hash(self, hash_, is_duplicated):
         url = split_url(self.url_parse.geturl())
@@ -34,3 +34,10 @@ class ContentFilter:
             "hash": hash_,
         })
         return result
+    
+    def _find_host(self):
+        url = split_url(self.url_parse.geturl())
+        return db.content.find_one({
+            'hostname': url.hostname,
+            'resource': url.resource,
+        })

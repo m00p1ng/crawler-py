@@ -46,4 +46,4 @@ class RobotsParser:
             if not db.disallow_links.find_one(data):
                 db.disallow_links.insert_one(data)
 
-        print_log(f"'{self.hostname}' disallow lists were added\n")
+        print_log(f"'{self.hostname}' disallow lists were added")

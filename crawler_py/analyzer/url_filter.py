@@ -1,8 +1,8 @@
 import re
-from urllib.parse import urljoin
 
 from ..utils import print_log, split_url
 from ..database import Database as db
+from ..settings import DEBUG
 
 
 class URLFilter:
@@ -38,7 +38,8 @@ class URLFilter:
         for link in disallow_links:
             pattern = r'^' + re.escape(link['resource'])
             if re.match(pattern, url_split.resource):
-                print_log(f"'{url}' is disallowed", 'red')
+                if DEBUG:
+                    print_log(f"Disallowed '{url}'", 'red')
                 return True
         return False
 
@@ -51,11 +52,11 @@ class URLFilter:
                 "resource": url_split.resource,
             })
 
-            if not result:
+            if not result and url not in urls:
                 urls.append(url)
-                print_log(f"Added '{url}'")
             else:
-                print_log(f"'{url}' is duplicated", 'yellow')
+                if DEBUG:
+                    print_log(f"Duplicated '{url}'", 'yellow')
 
         self.urls = urls
         return urls
