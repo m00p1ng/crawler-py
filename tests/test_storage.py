@@ -11,7 +11,8 @@ class TestStorage(unittest.TestCase):
     def test_save_html(self):
         current_path = os.getcwd()
         test_data_path = os.path.join(
-            current_path, 'tests', 'testdata', 'index.html')
+            current_path, 'tests', 'testdata', 'index.html'
+        )
 
         with open(test_data_path, 'r') as file:
             test_data = file.read()

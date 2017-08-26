@@ -18,6 +18,8 @@ class URLFilter:
         self.filter_duplicated()
         print_log("Filtering successful")
 
+        return self.urls
+
     def filter_disallow(self):
         urls = []
         for url in self.urls:
@@ -36,7 +38,7 @@ class URLFilter:
         for link in disallow_links:
             pattern = r'^' + re.escape(link['resource'])
             if re.match(pattern, url_split.resource):
-                print_log(f"{url} is disallowed", 'red')
+                print_log(f"'{url}' is disallowed", 'red')
                 return True
         return False
 
@@ -51,8 +53,9 @@ class URLFilter:
 
             if not result:
                 urls.append(url)
+                print_log(f"Added '{url}'")
             else:
-                print_log(f"`{url}` is duplicated", 'yellow')
+                print_log(f"'{url}' is duplicated", 'yellow')
 
         self.urls = urls
         return urls
