@@ -18,6 +18,12 @@ def fill_http_prefix(url):
         return f'http://{url}'
     return url
 
+def remove_www_prefix(url):
+    result = re.match(r'(www\.)(.*)', url)
+    if result:
+        return result.group(2)
+    return url
+
 
 def is_relative_path(url):
     url_parse = urlparse(url)
@@ -70,5 +76,4 @@ def check_extension(filename):
     extension = os.path.splitext(filename)[1]
     if extension in EXTRACT_EXTENSIONS or extension is '':
         return True
-    else:
-        return False
+    return False
