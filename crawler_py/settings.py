@@ -1,6 +1,3 @@
-import os
-from urllib.parse import urlparse
-
 DEBUG = False
 
 SEED_URL = 'http://ku.ac.th'
@@ -10,7 +7,6 @@ MAX_LEVEL = 10
 REQUEST_TIMEOUT = 5
 DELAY_FETCH = 0.5
 
-DATABASE_CONFIG_PATH = os.path.realpath('db.json')
 DATABASE_NAME = 'crawler-py'
 
 HEADER = {
@@ -20,6 +16,11 @@ HEADER = {
 EXTRACT_EXTENSIONS = [
     ".htm", ".html", ".xml", ".php", ".asp"
 ]
+
+import os
+from urllib.parse import urlparse
+
+DATABASE_CONFIG_PATH = os.path.realpath('db.json')
 
 # set default value
 if 'SAVE_ROOT' not in globals():
