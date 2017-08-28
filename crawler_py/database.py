@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from pymongo import MongoClient, errors
 
 from .utils import print_log, split_url
@@ -168,4 +169,5 @@ class _ErrorLog(_Collection):
             "hostname": url_split.hostname,
             "resource": url_split.resource,
             "reason": reason,
+            "timestamp": datetime.now(),
         })
