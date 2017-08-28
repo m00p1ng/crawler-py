@@ -1,5 +1,4 @@
 import os
-import re
 from urllib.parse import urlparse
 
 from .settings import SAVE_ROOT
@@ -41,16 +40,21 @@ def _create_dir_name(save_path):
         if not os.path.exists(save_path):
             os.makedirs(save_path)
         elif not os.path.isdir(save_path):
-            dirname = os.path.dirname(save_path)
-            _move_index_to_folder(dirname)
+            # dirname = os.path.dirname(save_path)
+            # _move_index_to_folder(dirname)
+            _move_index_to_folder(save_path)
     except NotADirectoryError:
         paths = save_path.replace(SAVE_ROOT, '')
         paths = paths.split('/')[1:]
-        _check_filename_dir(paths, -2)
+        _check_filename_dir(paths, -1)
 
 
 def _check_filename_dir(paths, i):
-    path = os.path.join(SAVE_ROOT, *paths[0: i + 1])
+    if i < -1:
+        path = os.path.join(SAVE_ROOT, *paths[0: i + 1])
+    else:
+        path = os.path.join(SAVE_ROOT, *paths)
+
     if os.path.exists(path) and not os.path.isdir(path):
         _move_index_to_folder(path)
         os.makedirs(os.path.join(SAVE_ROOT, *path))
@@ -59,7 +63,7 @@ def _check_filename_dir(paths, i):
 
 
 def _move_index_to_folder(path):
-    temp_index_file = os.path.join(path, 'temp.index.html')
+    temp_index_file = os.path.join(os.path.dirname(path), 'temp.index.html')
     os.rename(path, temp_index_file)
     os.makedirs(path)
 
