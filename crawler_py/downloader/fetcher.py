@@ -24,9 +24,11 @@ class Fetcher:
             return res.text
         except requests.ConnectionError:
             print_log(f"Cannot GET content from {self.url}", 'red')
-            db.queue.update_visited_link(self.url)
             db.error_log.add_log(self.url, "cant_get_content")
             return None
+        except requests.ReadTimeout:
+            print_log(f"Request Timeout {self.url}", 'red')
+            db.error_log.add_log(self.url, "request_timeout")
         except PageNotFound:
             print_log(f"Not Found Page", 'red')
             return None

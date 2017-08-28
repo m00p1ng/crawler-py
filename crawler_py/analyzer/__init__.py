@@ -30,10 +30,12 @@ class Analyzer:
         ue = URLExtractor(self.url_parse, self.content, SEED_HOSTNAME)
         urls = ue.extract_link()
 
-        urls = [url for url in urls if self._filter_extension(url)]
+        if urls:
+            urls = [url for url in urls if self._filter_extension(url)]
 
-        uf = URLFilter(urls)
-        urls = uf.filter_links()
+            uf = URLFilter(urls)
+            urls = uf.filter_links()
+
         return urls
 
     def _filter_extension(self, url):
