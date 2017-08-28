@@ -22,6 +22,11 @@ class URLExtractor:
             urls.append(redi_url)
         urls += self._find_tag(soup, 'a', 'href')
 
+        if len(urls) > 0:
+            print_log(f"Found {len(urls)} URLs", 'cyan')
+        else:
+            print_log(f"Not Found URLs", 'yellow')
+
         return urls
 
     def _find_tag(self, soup, tagname, attribute):
@@ -66,6 +71,9 @@ class URLExtractor:
     def _is_long_filename(self, url):
         url_split = split_url(url)
         if len(url_split.resource) > 255:
-            print_log(f"Skip URL {url}", 'yellow')
+            if DEBUG:
+                print_log(f"Skip URL {url}", 'yellow')
+            else:
+                print_log(f"Skip URLs", 'yellow')
             return True
         return False

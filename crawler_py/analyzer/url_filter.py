@@ -11,12 +11,19 @@ class URLFilter:
 
     def filter_links(self):
         print_log("Filtering URL disallowed links...")
-        self.filter_disallow()
-        print_log("Filtering successful")
+        disallowed_links = self.filter_disallow()
+        if disallowed_links == 0:
+            print_log("URLs not found in robots.txt")
+        else:
+            print_log(f"Disallowed {disallowed_links} URLs", 'red')
 
-        print_log("Filtering URL duplicated links...")
-        self.filter_duplicated()
-        print_log("Filtering successful")
+
+        print_log("Filtering duplicated URLs...")
+        duplicated_links = self.filter_duplicated()
+        if duplicated_links == 0:
+            print_log("URLs not duplicated")
+        else:
+            print_log(f"Duplicated {duplicated_links} URLs", 'yellow')
 
         return self.urls
 
@@ -25,8 +32,11 @@ class URLFilter:
         for url in self.urls:
             if not self._is_disallowed(url):
                 urls.append(url)
+
+        disallow_link = len(self.urls) - len(urls)
         self.urls = urls
-        return urls
+
+        return disallow_link
 
     def _is_disallowed(self, url):
         url_split = split_url(url)
@@ -58,5 +68,7 @@ class URLFilter:
                 if DEBUG:
                     print_log(f"Duplicated '{url}'", 'yellow')
 
+        duplicated_links = len(self.urls) - len(urls)
         self.urls = urls
-        return urls
+
+        return duplicated_links

@@ -49,8 +49,8 @@ def crawler():
             urls = analyzer.start()
 
             schedule.add(urls)
+            db.crawler_state.update_link_counter()
 
-        db.crawler_state.update_link_counter()
         db.queue.update_visited_link(url)
 
         time.sleep(DELAY_FETCH)

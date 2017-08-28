@@ -12,7 +12,7 @@ class Fetcher:
 
     def get_content(self):
         try:
-            link_counter = db.crawler_state.link_counter
+            link_counter = db.crawler_state.link_counter + 1
             print_log(f"[{link_counter}/{LIMIT_SITE}] GET '{self.url}'")
             res = requests.get(self.url, timeout=REQUEST_TIMEOUT)
 
@@ -27,5 +27,5 @@ class Fetcher:
             db.queue.update_visited_link(self.url)
             return None
         except PageNotFound:
-            print_log(f"Not Found Page '{self.url}'", 'red')
+            print_log(f"Not Found Page", 'red')
             return None
