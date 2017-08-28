@@ -28,12 +28,12 @@ class Fetcher:
                     return res.text
             return None
         except requests.ConnectionError:
-            print_log(f"Cannot GET content from {self.url}", 'red')
+            print_log("Cannot GET content", 'red')
             db.error_log.add_log(self.url, "cant_get_content")
             return None
         except requests.ReadTimeout:
-            print_log(f"Request Timeout {self.url}", 'red')
+            print_log("Request Timeout", 'red')
             db.error_log.add_log(self.url, "request_timeout")
         except PageNotFound:
-            print_log(f"Not Found Page", 'red')
+            print_log("Not Found Page", 'red')
             return None

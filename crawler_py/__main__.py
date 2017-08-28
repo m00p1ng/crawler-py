@@ -10,4 +10,4 @@ if __name__ == '__main__':
     try:
         crawler_py.main()
     except KeyboardInterrupt:
-        print("<-- bye ja -->")
+        print("\n<-- bye ja -->")

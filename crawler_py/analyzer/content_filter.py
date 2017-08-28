@@ -26,7 +26,7 @@ class ContentFilter:
         else:
             self._save_hash(hash_, True)
             db.error_log.add_log(url, "duplicated_content")
-            print_log(f"Duplicated Content '{url}'", 'yellow')
+            print_log(f"Duplicated Content", 'yellow')
             return True
 
     def _save_hash(self, hash_, is_duplicated):

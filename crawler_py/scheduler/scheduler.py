@@ -59,7 +59,7 @@ class Scheduler:
             if not self._find_url(url_split):
                 url_list.append({
                     'hostname': url_split.hostname,
-                    'resource': url_split.resource,
+                    'resource': url_split.resource.strip('/'),
                     'visited': False,
                 })
 

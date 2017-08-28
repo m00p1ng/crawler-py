@@ -27,7 +27,14 @@ def main():
         exit(1)
 
     db.connect(DATABASE_NAME)
-    crawler()
+
+    try:
+        crawler()
+    except PermissionError:
+        print()
+        print_log("PermissionError: will try again", 'red')
+        print()
+        main()
 
 
 def crawler():
