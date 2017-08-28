@@ -51,8 +51,6 @@ def crawler():
             if not is_duplicated:
                 schedule.add(urls)
                 db.crawler_state.update_link_counter()
-        else:
-            print_log(f"Cannot Extract Content", 'red')
 
         db.queue.update_visited_link(url)
 

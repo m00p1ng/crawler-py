@@ -154,7 +154,7 @@ class _Queue(_Collection):
     def update_visited_link(self, url):
         url_split = split_url(url)
 
-        self.collection.update_one(
+        self.collection.update_many(
             {'hostname': url_split.hostname, 'resource': url_split.resource},
             {'$set': {'visited': True}}
         )
