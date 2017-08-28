@@ -1,12 +1,25 @@
 from urllib.parse import urljoin
 
 from ..database import Database as db
-from ..utils import print_log, fill_http_prefix, split_url
+from ..utils import fill_http_prefix, split_url
+from ..settings import SEED_HOSTNAME
 
 
 class Scheduler:
     def __init__(self):
         self.queue = []
+        self.init_schedule()
+
+    def init_schedule(self):
+        self.update()
+
+        if self.count() == 0:
+            db.queue.insert_one({
+                'hostname': SEED_HOSTNAME,
+                'resource': '/',
+                'visited': False
+            })
+            self.update()
 
     def update(self, limit=100):
         self.queue = self._get_queue(limit)

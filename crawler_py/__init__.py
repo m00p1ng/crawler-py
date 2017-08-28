@@ -3,7 +3,7 @@ import time
 
 from .utils import print_log, fill_http_prefix
 from .database import Database as db
-from .settings import DATABASE_NAME, SEED_HOSTNAME, LIMIT_SITE, DELAY_FETCH
+from .settings import DATABASE_NAME, LIMIT_SITE, DELAY_FETCH
 
 from .analyzer import Analyzer
 from .downloader import Downloader
@@ -31,11 +31,11 @@ def main():
 
 
 def crawler():
-    link_counter = init_counter()
-    schedule = init_schedule()
+    schedule = Scheduler()
+    link_counter = db.crawler_state.link_counter
 
     while link_counter < LIMIT_SITE - 1 or schedule.size_queue() == 0:
-        link_counter = init_counter()
+        link_counter = db.crawler_state.link_counter
         url = schedule.get_url()
 
         if url is None:
@@ -50,31 +50,11 @@ def crawler():
 
             schedule.add(urls)
 
+        db.crawler_state.update_link_counter()
+        db.queue.update_visited_link(url)
+
         time.sleep(DELAY_FETCH)
+        print()
+
     print_log("Finish crawler", 'green')
 
-
-def init_counter():
-    link_counter = 0
-    if db.crawler_state.count() == 0:
-        db.crawler_state.insert_one({
-            "link_counter": 0
-        })
-    else:
-        link_counter = db.crawler_state.find_one()['link_counter']
-    return link_counter
-
-
-def init_schedule():
-    schedule = Scheduler()
-    schedule.update()
-
-    if schedule.count() == 0:
-        db.queue.insert_one({
-            'hostname': SEED_HOSTNAME,
-            'resource': '/',
-            'visited': False
-        })
-        schedule.update()
-
-    return schedule

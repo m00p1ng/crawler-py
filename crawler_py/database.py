@@ -1,7 +1,7 @@
 import json
 from pymongo import MongoClient, errors
 
-from .utils import print_log
+from .utils import print_log, split_url
 from .settings import DATABASE_CONFIG_PATH
 
 
@@ -81,11 +81,11 @@ class Database:
 
     @classmethod
     def _create_collection(cls, db):
-        cls.queue = _Collection(db, 'queue_links')
+        cls.queue = _Queue(db, 'queue_links')
         cls.content = _Collection(db, 'content_info')
         cls.disallow_links = _Collection(db, 'disallow_links')
         cls.host_info = _Collection(db, 'host_info')
-        cls.crawler_state = _Collection(db, 'crawler_state')
+        cls.crawler_state = _CrawlerState(db, 'crawler_state')
 
     @classmethod
     def disconnect(cls):
@@ -96,23 +96,62 @@ class Database:
 
 
 class _Collection:
-    def __init__(self, db, name):
-        self.db = db[name]
+    def __init__(self, db, collection_name):
+        self.collection = db[collection_name]
 
     def insert_one(self, data):
-        return self.db.insert_one(data)
+        return self.collection.insert_one(data)
 
     def insert_many(self, data):
-        return self.db.insert_many(data)
+        return self.collection.insert_many(data)
 
     def find(self, find_params=None, return_field=None, limit=0):
-        return self.db.find(find_params, return_field).limit(limit)
+        return self.collection.find(find_params, return_field).limit(limit)
 
     def find_one(self, find_params=None, return_field=None):
-        return self.db.find_one(find_params, return_field)
+        return self.collection.find_one(find_params, return_field)
 
     def update_one(self, find_params, update):
-        return self.db.update_one(find_params, update)
+        return self.collection.update_one(find_params, update)
 
     def count(self):
-        return self.db.count()
+        return self.collection.count()
+
+
+class _CrawlerState(_Collection):
+    def __init__(self, db, collection_name):
+        super().__init__(db, collection_name)
+        self.init_link_counter()
+
+    def init_link_counter(self):
+        if self.collection.count() == 0:
+            self.collection.insert_one({
+                "link_counter": 0
+            })
+
+    def update_link_counter(self):
+        self.collection.update_one(
+            {'_id': self.link_counter_id},
+            {'$inc': {'link_counter': 1}}
+        )
+
+    @property
+    def link_counter(self):
+        return self.collection.find_one()['link_counter']
+
+    @property
+    def link_counter_id(self):
+        return self.collection.find_one()['_id']
+
+
+class _Queue(_Collection):
+    def __init__(self, db, collection_name):
+        super().__init__(db, collection_name)
+
+    def update_visited_link(self, url):
+        url_split = split_url(url)
+
+        self.collection.update_one(
+            {'hostname': url_split.hostname, 'resource': url_split.resource},
+            {'$set': {'visited': True}}
+        )
