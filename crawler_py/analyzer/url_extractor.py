@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 
 from ..utils import is_relative_path, print_log, split_url
 from ..settings import DEBUG, MAX_LEVEL
+from ..database import Database as db
 
 
 class URLExtractor:
@@ -75,5 +76,6 @@ class URLExtractor:
                 print_log(f"Skip URL {url}", 'yellow')
             else:
                 print_log(f"Skip URLs", 'yellow')
+            db.error_log.add_log(url, "long_url")
             return True
         return False

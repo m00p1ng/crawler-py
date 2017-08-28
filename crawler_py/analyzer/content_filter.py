@@ -21,9 +21,12 @@ class ContentFilter:
             print_log(f"Added hash to database")
             storage.save(url, self.content)
             print_log(f"Stored '{url}'")
+            return False
         else:
             self._save_hash(hash_, True)
             print_log(f"Duplicated Content '{url}'", 'yellow')
+            db.error_log.add_log(url, "duplicated_content")
+            return True
 
     def _save_hash(self, hash_, is_duplicated):
         url = split_url(self.url_parse.geturl())

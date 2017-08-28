@@ -50,6 +50,7 @@ class Database:
     disallow_links = None
     host_info = None
     crawler_state = None
+    error_log = None
     _client = None
 
     @classmethod
@@ -85,6 +86,7 @@ class Database:
         cls.content = _Collection(db, 'content_info')
         cls.disallow_links = _Collection(db, 'disallow_links')
         cls.host_info = _Collection(db, 'host_info')
+        cls.error_log = _ErrorLog(db, 'error_log')
         cls.crawler_state = _CrawlerState(db, 'crawler_state')
 
     @classmethod
@@ -155,3 +157,15 @@ class _Queue(_Collection):
             {'hostname': url_split.hostname, 'resource': url_split.resource},
             {'$set': {'visited': True}}
         )
+
+class _ErrorLog(_Collection):
+    def __init__(self, db, collection_name):
+        super().__init__(db, collection_name)
+
+    def add_log(self, url, reason):
+        url_split = split_url(url)
+        self.collection.insert_one({
+            "hostname": url_split.hostname,
+            "resource": url_split.resource,
+            "reason": reason,
+        })

@@ -25,6 +25,7 @@ class Fetcher:
         except requests.ConnectionError:
             print_log(f"Cannot GET content from {self.url}", 'red')
             db.queue.update_visited_link(self.url)
+            db.error_log.add_log(self.url, "cant_get_content")
             return None
         except PageNotFound:
             print_log(f"Not Found Page", 'red')

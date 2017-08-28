@@ -46,10 +46,11 @@ def crawler():
 
         if content is not None:
             analyzer = Analyzer(url, content)
-            urls = analyzer.start()
+            urls, is_duplicated = analyzer.start()
 
-            schedule.add(urls)
-            db.crawler_state.update_link_counter()
+            if not is_duplicated:
+                schedule.add(urls)
+                db.crawler_state.update_link_counter()
 
         db.queue.update_visited_link(url)
 
