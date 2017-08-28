@@ -3,7 +3,7 @@ import requests
 
 from ..utils import print_log
 from ..database import Database as db
-from ..errors import PageNotFound
+from ..exceptions import PageNotFound
 from ..settings import LIMIT_SITE, REQUEST_TIMEOUT, ACCEPTED_CONTENT_TYPES
 
 
@@ -27,13 +27,16 @@ class Fetcher:
                 if re.match(content_type, res.headers['Content-Type']):
                     return res.text
             return None
+
         except requests.ConnectionError:
             print_log("Cannot GET content", 'red')
             db.error_log.add_log(self.url, "cant_get_content")
             return None
+
         except requests.ReadTimeout:
             print_log("Request Timeout", 'red')
             db.error_log.add_log(self.url, "request_timeout")
+
         except PageNotFound:
             print_log("Not Found Page", 'red')
             return None

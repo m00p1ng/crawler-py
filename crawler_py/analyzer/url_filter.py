@@ -1,6 +1,7 @@
 import re
 
-from ..utils import print_log, split_url
+from ..utils import print_log
+from ..urls import split_url
 from ..database import Database as db
 from ..settings import DEBUG
 

@@ -4,8 +4,9 @@ import requests
 from .fetcher import Fetcher
 from ..database import Database as db
 from ..analyzer import RobotsParser
-from ..utils import print_log, fill_http_prefix
-from ..errors import PageNotFound
+from ..utils import print_log
+from ..urls import fill_http_prefix
+from ..exceptions import PageNotFound
 from ..settings import REQUEST_TIMEOUT
 
 

@@ -2,7 +2,8 @@ import re
 from urllib.parse import urljoin, urlunparse, urlparse, unquote
 from bs4 import BeautifulSoup
 
-from ..utils import is_relative_path, print_log, split_url
+from ..utils import print_log
+from ..urls import is_relative_path, split_url
 from ..settings import DEBUG, MAX_LEVEL
 from ..database import Database as db
 

@@ -1,7 +1,8 @@
 import sys
 import time
 
-from .utils import print_log, fill_http_prefix
+from .utils import print_log
+from .urls import fill_http_prefix
 from .database import Database as db
 from .settings import DATABASE_NAME, LIMIT_SITE, DELAY_FETCH
 
@@ -28,41 +29,42 @@ def main():
 
     db.connect(DATABASE_NAME)
 
+    crawler()
+
+
+def crawler():
     try:
-        crawler()
+        schedule = Scheduler()
+        link_counter = db.crawler_state.link_counter
+
+        while link_counter < LIMIT_SITE - 1 or schedule.size_queue() == 0:
+            link_counter = db.crawler_state.link_counter
+            url = schedule.get_url()
+
+            if url is None:
+                break
+
+            downloader = Downloader(url)
+            content = downloader.start()
+
+            if content is not None:
+                analyzer = Analyzer(url, content)
+                urls, is_duplicated = analyzer.start()
+
+                if not is_duplicated:
+                    schedule.add(urls)
+                    db.crawler_state.update_link_counter()
+
+            db.queue.update_visited_link(url)
+
+            time.sleep(DELAY_FETCH)
+            print()
+
+        print_log("Finish crawler", 'green')
+
     except PermissionError:
         print()
         print_log("PermissionError: will try again", 'red')
         print()
-        main()
-
-
-def crawler():
-    schedule = Scheduler()
-    link_counter = db.crawler_state.link_counter
-
-    while link_counter < LIMIT_SITE - 1 or schedule.size_queue() == 0:
-        link_counter = db.crawler_state.link_counter
-        url = schedule.get_url()
-
-        if url is None:
-            break
-
-        downloader = Downloader(url)
-        content = downloader.start()
-
-        if content is not None:
-            analyzer = Analyzer(url, content)
-            urls, is_duplicated = analyzer.start()
-
-            if not is_duplicated:
-                schedule.add(urls)
-                db.crawler_state.update_link_counter()
-
-        db.queue.update_visited_link(url)
-
-        time.sleep(DELAY_FETCH)
-        print()
-
-    print_log("Finish crawler", 'green')
+        crawler()
 

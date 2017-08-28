@@ -1,78 +1,28 @@
-import re
+''' utilities module '''
+
 import os
 from datetime import datetime
-from collections import namedtuple
-from urllib.parse import urlparse
 from termcolor import colored
 
 from .settings import EXTRACT_EXTENSIONS
 
 
-def print_log(text, color='white'):
+def print_log(message, color='white'):
+    ''' Print log message with timestamp '''
+
     timestamp = datetime.now().strftime('%d-%m-%yT%H:%M:%S.%f')[:-3]
-    print(colored(f"[{timestamp}]  {text}", color))
-
-
-def fill_http_prefix(url):
-    if not re.match(r'^https?://', url):
-        return f'http://{url}'
-    return url
-
-def remove_www_prefix(url):
-    result = re.match(r'(www\.)(.*)', url)
-    if result:
-        return result.group(2)
-    return url
-
-
-def is_relative_path(url):
-    url_parse = urlparse(url)
-    return not bool(url_parse.netloc)
-
-
-def split_url(url):
-    url_parse = urlparse(url)
-    hostname = url_parse.netloc
-
-    resource = url_parse.path
-    resource = join_modifier_url(resource, url_parse)
-
-    split_result = namedtuple('SplitResult', ['hostname', 'resource'])
-    return split_result(hostname=hostname, resource=resource)
-
-
-def join_modifier_url(source, url_parse):
-    result = source
-    if url_parse.params:
-        result += f';{url_parse.params}'
-    if url_parse.query:
-        result += f'?{url_parse.query}'
-    if url_parse.fragment:
-        result += f'#{url_parse.fragment}'
-    return result
-
-
-def url_to_path(url):
-    filepath = namedtuple('FilePath', ['path', 'filename'])
-    url_parse = urlparse(url)
-
-    if url_parse.path in ['/', '']:
-        filename = join_modifier_url('index.html', url_parse)
-        path = ''
-    elif len(url_parse.path) > 0 and url_parse.path[-1] == '/':
-        filename = join_modifier_url('index.html', url_parse)
-        path = url_parse.path.rstrip('/').split('/')
-        path = os.path.join(*path)
-    else:
-        filename = url_parse.path.split('/')[-1]
-        filename = join_modifier_url(filename, url_parse)
-        path = url_parse.path.split('/')[:-1]
-        path = os.path.join(*path)
-
-    return filepath(path=path, filename=filename)
+    print(colored(f"[{timestamp}]  {message}", color))
 
 
 def check_extension(filename):
+    '''
+    Check extentions that can extract
+
+    Parameter:
+        filename (string): filename that need check
+    Return:
+        (bool): if in EXTRACT_EXTENSIONS return True
+    '''
     extension = os.path.splitext(filename)[1]
     if extension in EXTRACT_EXTENSIONS or extension is '':
         return True

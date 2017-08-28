@@ -1,51 +1,54 @@
+'''
+Database module
+
+Database schema
+--------------------
+ Collection: queue
+ :attribute
+    * hostname
+    * resource
+    * visited
+
+--------------------
+ Collection: content
+ :attribute
+    * hostname
+    * resource
+    * is_duplicated
+    * timestamp
+    * hash
+
+--------------------
+ Collection: disallow_link
+ :attribute
+    * hostname
+    * resource
+
+--------------------
+ Collection: host_info
+ :attribute
+    * hostname
+    * ip_addr
+    * has_robots
+    * downloaded_robots
+
+--------------------
+ Collection: crawler_state
+ :attribute
+    * link_count
+
+--------------------
+'''
 import json
 from datetime import datetime
 from pymongo import MongoClient, errors
 
-from .utils import print_log, split_url
+from .utils import print_log
+from .urls import split_url
 from .settings import DATABASE_CONFIG_PATH
 
 
 class Database:
-    '''
-    --------------------
-     Collection: queue
-     :attribute
-        * hostname
-        * resource
-        * visited
-
-    --------------------
-     Collection: content
-     :attribute
-        * hostname
-        * resource
-        * is_duplicated
-        * timestamp
-        * hash
-
-    --------------------
-     Collection: disallow_link
-     :attribute
-        * hostname
-        * resource
-
-    --------------------
-     Collection: host_info
-     :attribute
-        * hostname
-        * ip_addr
-        * has_robots
-        * downloaded_robots
-
-    --------------------
-     Collection: crawler_state
-     :attribute
-        * link_count
-
-    --------------------
-    '''
-
     queue = None
     content = None
     disallow_links = None
@@ -158,6 +161,7 @@ class _Queue(_Collection):
             {'hostname': url_split.hostname, 'resource': url_split.resource},
             {'$set': {'visited': True}}
         )
+
 
 class _ErrorLog(_Collection):
     def __init__(self, db, collection_name):

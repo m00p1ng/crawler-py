@@ -2,7 +2,8 @@ import os
 from urllib.parse import urlparse
 
 from .settings import SAVE_ROOT
-from .utils import url_to_path, check_extension, join_modifier_url, remove_www_prefix
+from .utils import check_extension
+from .urls import join_modifier_url, remove_www_prefix, url_to_path
 
 
 def save(url, content):

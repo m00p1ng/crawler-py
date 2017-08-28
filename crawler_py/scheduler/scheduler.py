@@ -1,7 +1,7 @@
 from urllib.parse import urljoin
 
 from ..database import Database as db
-from ..utils import fill_http_prefix, split_url
+from ..urls import fill_http_prefix, split_url
 from ..settings import SEED_HOSTNAME
 
 
@@ -22,7 +22,8 @@ class Scheduler:
             self.update()
 
     def update(self, limit=100):
-        self.queue = self._get_queue(limit)
+        if len(self.queue) == 0:
+            self.queue = self._get_queue(limit)
 
     def _get_queue(self, limit):
         urls = db.queue.find(
@@ -41,7 +42,9 @@ class Scheduler:
 
     def get_url(self):
         if self.size_queue() > 0:
-            return self.queue[0]
+            url = self.queue[0]
+            self.queue.pop(0)
+            return url
         else:
             return None
 

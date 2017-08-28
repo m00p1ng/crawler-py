@@ -5,7 +5,8 @@ from .content_filter import ContentFilter
 from .robots_parser import RobotsParser
 from .url_extractor import URLExtractor
 from .url_filter import URLFilter
-from ..utils import url_to_path, check_extension
+from ..utils import check_extension
+from ..urls import url_to_path
 from ..settings import SEED_HOSTNAME
 
 

@@ -3,7 +3,8 @@ from urllib.parse import urlunparse
 from datetime import datetime
 
 from .. import storage
-from ..utils import print_log, split_url
+from ..utils import print_log
+from ..urls import split_url
 from ..database import Database as db
 
 

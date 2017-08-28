@@ -1,7 +1,7 @@
 import unittest
 from urllib.parse import urlparse, urlunparse
 
-from crawler_py.utils import *
+from crawler_py.urls import *
 
 
 class TestUtils(unittest.TestCase):
