@@ -1,9 +1,10 @@
+import re
 import requests
 
 from ..utils import print_log
 from ..database import Database as db
 from ..errors import PageNotFound
-from ..settings import LIMIT_SITE, REQUEST_TIMEOUT
+from ..settings import LIMIT_SITE, REQUEST_TIMEOUT, ACCEPTED_CONTENT_TYPES
 
 
 class Fetcher:
@@ -21,7 +22,11 @@ class Fetcher:
                 raise PageNotFound
 
             print_log(f"GET content successful")
-            return res.text
+
+            for content_type in ACCEPTED_CONTENT_TYPES:
+                if re.match(content_type, res.headers['Content-Type']):
+                    return res.text
+            return None
         except requests.ConnectionError:
             print_log(f"Cannot GET content from {self.url}", 'red')
             db.error_log.add_log(self.url, "cant_get_content")
