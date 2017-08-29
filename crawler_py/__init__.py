@@ -37,12 +37,9 @@ def crawler():
         schedule = Scheduler()
         link_counter = db.crawler_state.link_counter
 
-        while link_counter < LIMIT_SITE - 1 or schedule.size_queue() == 0:
+        while link_counter < LIMIT_SITE - 1 and schedule.queue_size > 0:
             link_counter = db.crawler_state.link_counter
             url = schedule.get_url()
-
-            if url is None:
-                break
 
             downloader = Downloader(url)
             content = downloader.start()

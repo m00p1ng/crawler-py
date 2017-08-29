@@ -5,8 +5,6 @@ from .content_filter import ContentFilter
 from .robots_parser import RobotsParser
 from .url_extractor import URLExtractor
 from .url_filter import URLFilter
-from ..utils import check_extension
-from ..urls import url_to_path
 from ..settings import SEED_HOSTNAME
 
 
@@ -32,13 +30,7 @@ class Analyzer:
         urls = ue.extract_link()
 
         if urls:
-            urls = [url for url in urls if self._filter_extension(url)]
-
             uf = URLFilter(urls)
             urls = uf.filter_links()
 
         return urls
-
-    def _filter_extension(self, url):
-        filename = url_to_path(url).filename
-        return check_extension(filename)

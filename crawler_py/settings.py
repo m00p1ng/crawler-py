@@ -2,20 +2,16 @@ DEBUG = False
 
 SEED_URL = 'http://ku.ac.th'
 
-LIMIT_SITE = 20000
+LIMIT_SITE = 10000
 MAX_LEVEL = 10
 REQUEST_TIMEOUT = 10
-DELAY_FETCH = 0
+DELAY_FETCH = 1
 
 DATABASE_NAME = 'crawler-py'
 
 HEADERS = {
     "User-agent": "m00p1ng130t",
 }
-
-EXTRACT_EXTENSIONS = [
-    ".htm", ".html", ".xml", ".php", ".asp"
-]
 
 ACCEPTED_CONTENT_TYPES = [
     'text/html',
