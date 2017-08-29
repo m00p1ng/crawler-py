@@ -67,4 +67,3 @@ def crawler():
         print_log("PermissionError: will try again", 'red')
         print()
         crawler()
-

@@ -1,10 +1,10 @@
 import re
-import requests
 
+from . import http
 from ..utils import print_log
 from ..database import Database as db
 from ..exceptions import PageNotFound
-from ..settings import LIMIT_SITE, REQUEST_TIMEOUT, ACCEPTED_CONTENT_TYPES
+from ..settings import LIMIT_SITE, ACCEPTED_CONTENT_TYPES
 
 
 class Fetcher:
@@ -15,7 +15,7 @@ class Fetcher:
         try:
             link_counter = db.crawler_state.link_counter + 1
             print_log(f"[{link_counter}/{LIMIT_SITE}] GET '{self.url}'")
-            res = requests.get(self.url, timeout=REQUEST_TIMEOUT)
+            res = http.get(self.url)
 
             if res.status_code == 404:
                 db.queue.update_visited_link(self.url)
@@ -28,12 +28,12 @@ class Fetcher:
                     return res.text
             return None
 
-        except requests.ConnectionError:
+        except http.exceptions.ConnectionError:
             print_log("Cannot GET content", 'red')
             db.error_log.add_log(self.url, "cant_get_content")
             return None
 
-        except requests.ReadTimeout:
+        except http.exceptions.ReadTimeout:
             print_log("Request Timeout", 'red')
             db.error_log.add_log(self.url, "request_timeout")
 

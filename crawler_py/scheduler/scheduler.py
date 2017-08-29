@@ -22,7 +22,7 @@ class Scheduler:
             self.update()
 
     def update(self, limit=100):
-        if len(self.queue) == 0:
+        if not self.queue:
             self.queue = self._get_queue(limit)
 
     def _get_queue(self, limit):
@@ -41,14 +41,15 @@ class Scheduler:
         return urls_join
 
     def get_url(self):
-        if self.size_queue() > 0:
+        if self.queue_size > 0:
             url = self.queue[0]
             self.queue.pop(0)
             return url
         else:
             return None
 
-    def size_queue(self):
+    @property
+    def queue_size(self):
         self.update()
         return len(self.queue)
 
@@ -60,9 +61,11 @@ class Scheduler:
         for url in urls:
             url_split = split_url(url)
             if not self._find_url(url_split):
+                hostname = url_split.hostname
+                resource = '/' + url_split.resource.strip('/')
                 url_list.append({
-                    'hostname': url_split.hostname,
-                    'resource': url_split.resource.strip('/'),
+                    'hostname': hostname,
+                    'resource': resource,
                     'visited': False,
                 })
 

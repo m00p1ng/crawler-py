@@ -4,3 +4,7 @@ class Error(Exception):
 
 class PageNotFound(Error):
     pass
+
+
+class DatabaseConfigNotFound(Error):
+    pass

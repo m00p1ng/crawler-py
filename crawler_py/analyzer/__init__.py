@@ -40,7 +40,5 @@ class Analyzer:
         return urls
 
     def _filter_extension(self, url):
-        filepath = url_to_path(url)
-        filename = filepath.filename
-
+        filename = url_to_path(url).filename
         return check_extension(filename)

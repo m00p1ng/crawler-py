@@ -41,8 +41,6 @@ def _create_dir_name(save_path):
         if not os.path.exists(save_path):
             os.makedirs(save_path)
         elif not os.path.isdir(save_path):
-            # dirname = os.path.dirname(save_path)
-            # _move_index_to_folder(dirname)
             _move_index_to_folder(save_path)
     except NotADirectoryError:
         paths = save_path.replace(SAVE_ROOT, '')

@@ -9,7 +9,7 @@ DELAY_FETCH = 0
 
 DATABASE_NAME = 'crawler-py'
 
-HEADER = {
+HEADERS = {
     "User-agent": "m00p1ng130t",
 }
 

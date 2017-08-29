@@ -1,13 +1,12 @@
 from urllib.parse import urlparse
-import requests
 
+from . import http
 from .fetcher import Fetcher
 from ..database import Database as db
 from ..analyzer import RobotsParser
 from ..utils import print_log
 from ..urls import fill_http_prefix
 from ..exceptions import PageNotFound
-from ..settings import REQUEST_TIMEOUT
 
 
 class Downloader:
@@ -38,8 +37,8 @@ class Downloader:
             url = f'{url}/robots.txt'
 
             print_log(f"GET robots.txt from {self.hostname}")
-            res = requests.get(url, timeout=REQUEST_TIMEOUT)
-            has_robots = self.has_robots(res)
+            res = http.get(url)
+            has_robots = http.is_found_page(res.status_code)
 
             db.host_info.update_one(
                 {'hostname': self.hostname},
@@ -54,8 +53,5 @@ class Downloader:
             else:
                 print_log(
                     f"Not found robots.txt from {self.hostname}", 'yellow')
-        except requests.ConnectionError:
+        except http.exceptions.ConnectionError:
             print_log(f"Cannot GET {self.hostname}/robots.txt", 'red')
-
-    def has_robots(self, res):
-        return res.status_code >= 200 and res.status_code < 300

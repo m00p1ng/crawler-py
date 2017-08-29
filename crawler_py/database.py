@@ -39,6 +39,7 @@ Database schema
 
 --------------------
 '''
+import os
 import json
 from datetime import datetime
 from pymongo import MongoClient, errors
@@ -46,9 +47,11 @@ from pymongo import MongoClient, errors
 from .utils import print_log
 from .urls import split_url
 from .settings import DATABASE_CONFIG_PATH
+from .exceptions import DatabaseConfigNotFound
 
 
 class Database:
+    ''' Database model '''
     queue = None
     content = None
     disallow_links = None
@@ -60,29 +63,39 @@ class Database:
     @classmethod
     def connect(cls, db_name):
         try:
-            with open(DATABASE_CONFIG_PATH, 'r') as file:
-                MONGO = json.loads(file.read())
+            if not os.path.exists(DATABASE_CONFIG_PATH):
+                raise DatabaseConfigNotFound
 
             print_log("Connecting to database...")
-            cls._client = MongoClient(MONGO['HOST'], MONGO['PORT'])
-            cls._client.server_info()
-
-            db = cls._client[db_name]
-            if 'USERNAME' in MONGO and 'PASSWORD' in MONGO:
-                db.authenticate(MONGO['USERNAME'], MONGO['PASSWORD'])
+            db = cls._connect(db_name)
 
             print_log("Connection successful")
             cls._create_collection(db)
 
             return db
 
-        except FileNotFoundError:
+        except DatabaseConfigNotFound:
             print_log(
                 f"Database config not exists on `{DATABASE_CONFIG_PATH}`", 'red')
             exit(1)
+
         except errors.ServerSelectionTimeoutError:
             print_log("Connection Timeout. Please Try again", 'red')
             exit(1)
+
+    @classmethod
+    def _connect(cls, db_name):
+        with open(DATABASE_CONFIG_PATH, 'r') as file:
+            MONGO = json.loads(file.read())
+
+        cls._client = MongoClient(MONGO['HOST'], MONGO['PORT'])
+        cls._client.server_info()
+
+        db = cls._client[db_name]
+        if 'USERNAME' in MONGO and 'PASSWORD' in MONGO:
+            db.authenticate(MONGO['USERNAME'], MONGO['PASSWORD'])
+
+        return db
 
     @classmethod
     def _create_collection(cls, db):
@@ -106,21 +119,27 @@ class _Collection:
         self.collection = db[collection_name]
 
     def insert_one(self, data):
+        '''Override insert_one method from pymongo'''
         return self.collection.insert_one(data)
 
     def insert_many(self, data):
+        '''Override insert_manyy method from pymongo'''
         return self.collection.insert_many(data)
 
     def find(self, find_params=None, return_field=None, limit=0):
+        '''Override find method from pymongo'''
         return self.collection.find(find_params, return_field).limit(limit)
 
     def find_one(self, find_params=None, return_field=None):
+        '''Override find_one method from pymongo'''
         return self.collection.find_one(find_params, return_field)
 
     def update_one(self, find_params, update):
+        '''Override update_one method from pymongo'''
         return self.collection.update_one(find_params, update)
 
     def count(self):
+        '''Override count method from pymongo'''
         return self.collection.count()
 
 
@@ -143,7 +162,7 @@ class _CrawlerState(_Collection):
 
     @property
     def link_counter(self):
-        return self.collection.find_one()['link_counter']
+        return int(self.collection.find_one()['link_counter'])
 
     @property
     def link_counter_id(self):
