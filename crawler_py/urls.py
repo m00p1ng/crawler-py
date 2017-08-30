@@ -6,6 +6,7 @@ import os
 import re
 from collections import namedtuple
 from urllib.parse import urlparse
+from .settings import IGNORE_WORD_LIST, DEBUG
 
 
 def fill_http_prefix(url):
@@ -119,6 +120,16 @@ def url_to_path(url):
         path = os.path.join(*path)
 
     return FilePath(path=path, filename=filename)
+
+
+def is_ignore_link(url):
+    pattern = '|'.join(IGNORE_WORD_LIST)
+    pattern = f'.*({pattern}).*'
+    result = re.match(pattern, url)
+    if result:
+        return True, result.group(1)
+    else:
+        return False, None
 
 
 SplitResult = namedtuple('SplitResult', ['hostname', 'resource'])

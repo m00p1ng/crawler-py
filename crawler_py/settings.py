@@ -19,6 +19,16 @@ ACCEPTED_CONTENT_TYPES = [
     'application/xhtml+xml',
 ]
 
+EXTRACT_EXTENSIONS = [
+    ".htm", ".html", ".xml", ".php", ".asp"
+]
+
+IGNORE_WORD_LIST = [
+    "image",
+    "photo",
+    "#"
+]
+
 import os
 from urllib.parse import urlparse
 

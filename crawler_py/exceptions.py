@@ -8,3 +8,7 @@ class PageNotFound(Error):
 
 class DatabaseConfigNotFound(Error):
     pass
+
+
+class ContentTypeNotFound(Error):
+    pass
