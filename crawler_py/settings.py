@@ -26,6 +26,7 @@ EXTRACT_EXTENSIONS = [
 IGNORE_WORD_LIST = [
     "image",
     "photo",
+    "/gallery/",
     "#"
 ]
 

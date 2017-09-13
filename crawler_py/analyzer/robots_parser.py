@@ -15,7 +15,7 @@ class RobotsParser:
         print_log("Extracting robots.txt")
         lines = self._split_lines()
         for i, line in enumerate(lines):
-            if re.match(r'^User-agent: \*', line):
+            if re.match(r'^User-[Aa]gent: \*', line):
                 self.resources = self._match_disallow_link(i + 1, lines)
                 break
         return self.resources
@@ -27,7 +27,7 @@ class RobotsParser:
 
     def _match_disallow_link(self, i, lines):
         resources = []
-        while i < len(lines) and not re.match(r'^User-agent', lines[i]):
+        while i < len(lines) and not re.match(r'^User-[Aa]gent', lines[i]):
             result = re.match(r'^Disallow: (.*)', lines[i])
             if result:
                 resources.append(result.group(1))
@@ -47,7 +47,7 @@ class RobotsParser:
             if not db.disallow_links.find_one(data):
                 db.disallow_links.insert_one(data)
 
-        if re.match(r'^User-agent', self.content):
+        if re.search(r'User-[Aa]gent', self.content):
             storage.save(f"{self.hostname}/robots.txt",self.content)
 
         print_log(f"'{self.hostname}' disallow lists were added")

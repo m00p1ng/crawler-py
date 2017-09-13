@@ -76,7 +76,7 @@ class URLExtractor:
             if DEBUG:
                 print_log(f"Skip URL {url}", 'yellow')
             else:
-                print_log(f"Skip URLs", 'yellow')
+                print_log(f"Skip Long URLs", 'yellow')
             db.error_log.add_log(url, "long_url")
             return True
         return False
