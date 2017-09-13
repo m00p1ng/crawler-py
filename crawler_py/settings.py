@@ -27,6 +27,7 @@ IGNORE_WORD_LIST = [
     "image",
     "photo",
     "/gallery/",
+    "mailto",
     "#"
 ]
 
