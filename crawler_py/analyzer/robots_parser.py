@@ -1,5 +1,6 @@
 import re
 
+from .. import storage
 from ..utils import print_log
 from ..database import Database as db
 
@@ -45,5 +46,7 @@ class RobotsParser:
             }
             if not db.disallow_links.find_one(data):
                 db.disallow_links.insert_one(data)
+
+        storage.save(f"{self.hostname}/robots.txt",self.content)
 
         print_log(f"'{self.hostname}' disallow lists were added")
