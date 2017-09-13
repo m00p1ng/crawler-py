@@ -35,17 +35,16 @@ class Analyzer:
 
             uf = URLFilter(urls)
             urls = uf.filter_links()
-            
+
             before_link = len(urls)
             urls = [url for url in urls if self._filter_extension(url)]
             urls = [url for url in urls if self._filter_ignore_link(url)]
 
             uniq_link = len(urls)
-            skip_link = before_link-uniq_link
+            skip_link = before_link - uniq_link
             if skip_link > 0 and not DEBUG:
                 print_log(f"Skiped {skip_link} URLs", 'yellow')
             print_log(f"Passed {uniq_link} URLs", 'green')
-
 
         return urls
 

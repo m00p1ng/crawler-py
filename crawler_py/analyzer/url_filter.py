@@ -60,7 +60,7 @@ class URLFilter:
             url_split = split_url(url)
             result = db.queue.find_one({
                 "hostname": url_split.hostname,
-                "resource": url_split.resource,
+                "resource": '/' + url_split.resource.strip('/'),
             })
 
             if not result and url not in urls:

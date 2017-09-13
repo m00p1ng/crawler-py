@@ -47,6 +47,7 @@ class RobotsParser:
             if not db.disallow_links.find_one(data):
                 db.disallow_links.insert_one(data)
 
-        storage.save(f"{self.hostname}/robots.txt",self.content)
+        if re.match(r'^User-agent', self.content):
+            storage.save(f"{self.hostname}/robots.txt",self.content)
 
         print_log(f"'{self.hostname}' disallow lists were added")
