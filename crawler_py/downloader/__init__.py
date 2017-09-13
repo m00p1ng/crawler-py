@@ -53,5 +53,10 @@ class Downloader:
             else:
                 print_log(
                     f"Not found robots.txt from {self.hostname}", 'yellow')
+
         except http.exceptions.ConnectionError:
             print_log(f"Cannot GET {self.hostname}/robots.txt", 'red')
+
+        except http.exceptions.ReadTimeout:
+            print_log("Request Timeout", 'red')
+            db.error_log.add_log(self.url, "request_timeout")
