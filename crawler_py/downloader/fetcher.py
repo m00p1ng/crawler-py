@@ -33,6 +33,10 @@ class Fetcher:
             print_log("Request Timeout", 'red')
             db.error_log.add_log(self.url, "request_timeout")
 
+        except http.exceptions.TooManyRedirects:
+            print_log("Too Many Redirect", 'red')
+            db.error_log.add_log(self.url, "many_redirect")
+
         except PageNotFound:
             print_log("Not Found Page", 'red')
 
