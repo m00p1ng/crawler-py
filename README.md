@@ -3,7 +3,7 @@ The web crawler with python
 
 ## Requirements
 * [Python](https://www.python.org) v3.6 or greater
-* [MongoDB](https://www.mongodb.com) v3.4 or greater
+* [MongoDB](https://www.mongodb.com) v3.0 or greater
 
 ## Python Dependencies
 * [Beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) v4.6.0
@@ -21,7 +21,7 @@ $ git clone https://github.com/m00p1ng/crawler-py
 2. Install python dependencies
 ```
 $ cd crawler-py
-$ pip install -r requirements.py
+$ pip install -r requirements.txt
 ```
 
 ## How to run
@@ -56,7 +56,7 @@ If your database has authentication add **`USERNAME`** and **`PASSWORD`**
 
 ## Crawler Settings
 
-* **`DEBUG`** Il `True` will show more information on console
+* **`DEBUG`** If `True` will show more information on console
 * **`SEED_URL`** root url for crawler
 * **`LIMIT_SITE`** limit size of crawler site
 * **`MAX_LEVEL`** limit level site for crawler (prevent crawler traps`)
