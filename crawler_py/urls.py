@@ -125,7 +125,7 @@ def url_to_path(url):
 def is_ignore_link(url):
     pattern = '|'.join(IGNORE_WORD_LIST)
     pattern = f'.*({pattern}).*'
-    result = re.match(pattern, url)
+    result = re.match(pattern, url, re.IGNORECASE)
     if result:
         return True, result.group(1)
     else:

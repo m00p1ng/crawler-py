@@ -5,7 +5,7 @@ SEED_URL = 'http://ku.ac.th'
 LIMIT_SITE = 10000
 MAX_LEVEL = 10
 REQUEST_TIMEOUT = 10
-DELAY_FETCH = 1
+DELAY_FETCH = 10
 
 DATABASE_NAME = 'crawler-py'
 
@@ -26,9 +26,14 @@ EXTRACT_EXTENSIONS = [
 IGNORE_WORD_LIST = [
     "image",
     "photo",
-    "/gallery/",
+    "picture",
+    "gallery",
+    "album",
     "mailto",
-    "#"
+    "download",
+    "login",
+    "logout",
+    "#",
 ]
 
 import os
