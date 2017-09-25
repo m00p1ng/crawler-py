@@ -3,7 +3,7 @@ import re
 from . import http
 from ..utils import print_log
 from ..database import Database as db
-from ..exceptions import PageNotFound, ContentTypeNotFound
+from ..exceptions import PageNotFound, ContentTypeNotFound, ContentTypeNotAccepted
 from ..settings import LIMIT_SITE, ACCEPTED_CONTENT_TYPES
 
 
@@ -41,7 +41,10 @@ class Fetcher:
             print_log("Not Found Page", 'red')
 
         except ContentTypeNotFound:
-            print_log("Content-type not found", 'red')
+            print_log("Content-type Not Found", 'red')
+
+        except ContentTypeNotAccepted as e:
+            print_log(f"Content-type '{e.content_type}' Not Accepted", 'red')
 
     def check_content_type(self, response):
         if 'content-type' not in response.headers:
@@ -50,4 +53,4 @@ class Fetcher:
         for content_type in ACCEPTED_CONTENT_TYPES:
             if re.match(content_type, response.headers['content-type']):
                 return response.text
-        return None
+        raise ContentTypeNotAccepted(response.headers['content-type'])

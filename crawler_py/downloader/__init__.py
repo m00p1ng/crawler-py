@@ -21,7 +21,7 @@ class Downloader:
         if not self.check_host_info_exist():
             db.host_info.insert_one({'hostname': self.hostname})
             self.get_robots()
-
+        
         return content
 
     def check_host_info_exist(self):
