@@ -56,14 +56,16 @@ class URLFilter:
 
     def filter_duplicated(self):
         urls = []
-        for url in self.urls:
+        uniq_url = list(set(self.urls))
+        
+        for url in uniq_url:
             url_split = split_url(url)
             result = db.queue.find_one({
                 "hostname": url_split.hostname,
                 "resource": '/' + url_split.resource.strip('/'),
             })
 
-            if not result and url not in urls:
+            if not result:
                 urls.append(url)
             else:
                 if DEBUG:
