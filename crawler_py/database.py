@@ -47,7 +47,6 @@ from pymongo import MongoClient, errors
 from .utils import print_log
 from .urls import split_url
 from .settings import DATABASE_CONFIG_PATH
-from .exceptions import DatabaseConfigNotFound
 
 
 class Database:
@@ -63,9 +62,6 @@ class Database:
     @classmethod
     def connect(cls, db_name):
         try:
-            if not os.path.exists(DATABASE_CONFIG_PATH):
-                raise DatabaseConfigNotFound
-
             print_log("Connecting to database...")
             db = cls._connect(db_name)
 
@@ -74,19 +70,19 @@ class Database:
 
             return db
 
-        except DatabaseConfigNotFound:
-            print_log(
-                f"Database config not exists on `{DATABASE_CONFIG_PATH}`", 'red')
-            exit(1)
-
         except errors.ServerSelectionTimeoutError:
             print_log("Connection Timeout. Please Try again", 'red')
             exit(1)
 
     @classmethod
     def _connect(cls, db_name):
-        with open(DATABASE_CONFIG_PATH, 'r') as file:
-            MONGO = json.loads(file.read())
+        if not os.path.exists(DATABASE_CONFIG_PATH):
+            MONGO = {}
+            MONGO['HOST'] = 'localhost'
+            MONGO['PORT'] = 27017
+        else:
+            with open(DATABASE_CONFIG_PATH, 'r') as file:
+                MONGO = json.loads(file.read())
 
         cls._client = MongoClient(MONGO['HOST'], MONGO['PORT'])
         cls._client.server_info()
