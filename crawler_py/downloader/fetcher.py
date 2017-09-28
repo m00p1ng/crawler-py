@@ -14,7 +14,8 @@ class Fetcher:
     def get_content(self):
         try:
             link_counter = db.crawler_state.link_counter + 1
-            print_log(f"[{link_counter}/{LIMIT_SITE}] GET '{self.url}'")
+            print_log(f"[{link_counter}/{LIMIT_SITE}]")
+            print_log(f"GET {self.url}")
             res = http.get(self.url)
 
             if res.status_code == 404:

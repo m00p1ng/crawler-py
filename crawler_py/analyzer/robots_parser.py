@@ -1,6 +1,7 @@
 import re
 
 from .. import storage
+from ..urls import remove_www_prefix
 from ..utils import print_log
 from ..database import Database as db
 
@@ -48,6 +49,6 @@ class RobotsParser:
                 db.disallow_links.insert_one(data)
 
         if re.search(r'User-[Aa]gent', self.content):
-            storage.save(f"{self.hostname}/robots.txt",self.content)
+            storage.save(f"{remove_www_prefix(self.hostname)}/robots.txt",self.content)
 
         print_log(f"'{self.hostname}' disallow lists were added")

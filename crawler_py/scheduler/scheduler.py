@@ -60,26 +60,14 @@ class Scheduler:
         url_list = []
         for url in urls:
             url_split = split_url(url)
-            if not self._find_url(url_split):
-                hostname = url_split.hostname
-                resource = '/' + url_split.resource.strip('/')
-                url_list.append({
-                    'hostname': hostname,
-                    'resource': resource,
-                    'visited': False,
-                })
+            hostname = url_split.hostname
+            resource = '/' + url_split.resource.strip('/')
+            url_list.append({
+                'hostname': hostname,
+                'resource': resource,
+                'visited': False,
+            })
 
         if url_list:
             db.queue.insert_many(url_list)
             self.update()
-
-    def _find_url(self, url_split):
-        result = db.queue.find_one({
-            'hostname': url_split.hostname,
-            'resource': url_split.resource,
-        })
-
-        if result:
-            return True
-        else:
-            return False

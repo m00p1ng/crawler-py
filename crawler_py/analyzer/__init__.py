@@ -37,7 +37,8 @@ class Analyzer:
             uf = URLFilter(urls)
             urls = uf.filter_links()
 
-            print_log(f"Passed {len(urls)} URLs", 'green')
+            if urls:
+                print_log(f"Passed {len(urls)} URLs", 'green')
 
         return urls
 
