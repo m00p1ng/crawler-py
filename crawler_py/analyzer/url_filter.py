@@ -5,6 +5,7 @@ from ..urls import split_url
 from ..database import Database as db
 from ..settings import DEBUG
 
+link_cached = set()
 
 class URLFilter:
     def __init__(self, urls):
@@ -57,21 +58,30 @@ class URLFilter:
     def filter_duplicated(self):
         urls = []
         uniq_url = list(set(self.urls))
+        copy_url = list(uniq_url)
         
         for url in uniq_url:
-            url_split = split_url(url)
-            result = db.queue.find_one({
-                "hostname": url_split.hostname,
-                "resource": '/' + url_split.resource.strip('/'),
-            })
+            if url in link_cached:
+                if DEBUG:
+                    print_log(f"Duplicated '{url}'", 'yellow')
+                continue
 
+            result = self.find_url(url)
             if not result:
                 urls.append(url)
             else:
                 if DEBUG:
                     print_log(f"Duplicated '{url}'", 'yellow')
 
+        link_cached.update(copy_url)
         duplicated_links = len(self.urls) - len(urls)
         self.urls = urls
 
         return duplicated_links
+    
+    def find_url(self, url):
+        url_split = split_url(url)
+        return db.queue.find_one({
+            "hostname": url_split.hostname,
+            "resource": '/' + url_split.resource.strip('/'),
+        })
