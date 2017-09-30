@@ -1,11 +1,14 @@
 import re
+from urllib.parse import urlparse
 
 from ..utils import print_log
 from ..urls import split_url
 from ..database import Database as db
 from ..settings import DEBUG
+from ..downloader import RobotFetcher
 
 link_cached = set()
+host_info_cached = set()
 
 class URLFilter:
     def __init__(self, urls):
@@ -32,8 +35,15 @@ class URLFilter:
     def filter_disallow(self):
         urls = []
         for url in self.urls:
-            if not self._is_disallowed(url):
+            hostname = urlparse(url).netloc
+            if not hostname in host_info_cached and not self.check_host_info_exist(hostname):
+                db.host_info.insert_one({'hostname': hostname})
+                RobotFetcher(url).get()
+                if not self._is_disallowed(url):
+                    urls.append(url)
+            elif not self._is_disallowed(url):
                 urls.append(url)
+            host_info_cached.add(hostname)
 
         disallow_link = len(self.urls) - len(urls)
         self.urls = urls
@@ -79,3 +89,10 @@ class URLFilter:
             "hostname": url_split.hostname,
             "resource": '/' + url_split.resource.strip('/'),
         })
+
+    def check_host_info_exist(self, hostname):
+        result = db.host_info.find_one({
+            'hostname': hostname
+        })
+
+        return result

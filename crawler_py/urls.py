@@ -6,14 +6,14 @@ import os
 import re
 from collections import namedtuple
 from urllib.parse import urlparse
-from .settings import IGNORE_WORD_LIST
+from .settings import IGNORE_WORD_LIST, SEED_HOSTNAME
 
 
 SplitResult = namedtuple('SplitResult', ['hostname', 'resource'])
 FilePath = namedtuple('FilePath', ['path', 'filename'])
 
 
-def fill_http_prefix(url):
+def fill_http_prefix(scheme, url):
     '''
     Fill http prefix if doesn't exist
 
@@ -23,7 +23,7 @@ def fill_http_prefix(url):
         (string): URL with http prefix
     '''
     if not re.match(r'^https?://', url):
-        return f'http://{url}'
+        return f'{scheme}://{url}'
     return url
 
 
@@ -134,3 +134,7 @@ def is_ignore_link(url):
         return True, result.group(1)
     else:
         return False, None
+
+def is_under_seed_root(url):
+    url_parse = urlparse(url)
+    return SEED_HOSTNAME in url_parse.netloc

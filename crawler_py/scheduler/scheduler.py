@@ -1,8 +1,8 @@
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 from ..database import Database as db
 from ..urls import fill_http_prefix, split_url
-from ..settings import SEED_HOSTNAME
+from ..settings import SEED_HOSTNAME, SEED_SCHEME
 
 
 class Scheduler:
@@ -15,6 +15,7 @@ class Scheduler:
 
         if self.count() == 0:
             db.queue.insert_one({
+                'scheme': SEED_SCHEME,
                 'hostname': SEED_HOSTNAME,
                 'resource': '/',
                 'visited': False
@@ -28,13 +29,18 @@ class Scheduler:
     def _get_queue(self, limit):
         urls = db.queue.find(
             find_params={"visited": False},
-            return_field={'hostname': 1, 'resource': 1, '_id': 0},
+            return_field={
+                "scheme": 1,
+                'hostname': 1,
+                'resource': 1,
+                '_id': 0
+            },
             limit=limit
         )
 
         urls_join = []
         for url in urls:
-            hostname = fill_http_prefix(url['hostname'])
+            hostname = fill_http_prefix(url['scheme'], url['hostname'])
             resource = url['resource']
             urls_join.append(urljoin(hostname, resource))
 
@@ -60,9 +66,13 @@ class Scheduler:
         url_list = []
         for url in urls:
             url_split = split_url(url)
+            scheme = urlparse(url).scheme
+            if not scheme:
+                scheme = "http"
             hostname = url_split.hostname
             resource = '/' + url_split.resource.strip('/')
             url_list.append({
+                'scheme': scheme,
                 'hostname': hostname,
                 'resource': resource,
                 'visited': False,

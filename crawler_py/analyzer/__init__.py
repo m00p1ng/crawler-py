@@ -29,7 +29,7 @@ class Analyzer:
         return cf.filter_duplicated()
 
     def _url_analyzer(self):
-        ue = URLExtractor(self.url_parse, self.content, SEED_HOSTNAME)
+        ue = URLExtractor(self.url_parse, self.content)
         urls = ue.extract_link()
 
         if urls:

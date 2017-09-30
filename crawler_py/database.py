@@ -5,6 +5,7 @@ Database schema
 --------------------
  Collection: queue
  :attribute
+    * scheme
     * hostname
     * resource
     * visited

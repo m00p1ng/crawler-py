@@ -55,3 +55,4 @@ if not os.path.exists(SAVE_ROOT):
     os.makedirs(SAVE_ROOT)
 
 SEED_HOSTNAME = urlparse(SEED_URL).netloc
+SEED_SCHEME = urlparse(SEED_URL).scheme

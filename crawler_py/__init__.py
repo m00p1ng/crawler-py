@@ -7,7 +7,7 @@ from .database import Database as db
 from .settings import DATABASE_NAME, LIMIT_SITE, DELAY_FETCH
 
 from .analyzer import Analyzer
-from .downloader import Downloader
+from .downloader import Fetcher
 from .scheduler import Scheduler
 
 
@@ -41,8 +41,7 @@ def crawler():
             link_counter = db.crawler_state.link_counter
             url = schedule.get_url()
 
-            downloader = Downloader(url)
-            content = downloader.start()
+            content = Fetcher(url).get_content()
 
             if content is not None:
                 analyzer = Analyzer(url, content)
