@@ -48,7 +48,6 @@ class URLExtractor:
 
         return urls
 
-
     def _redirect_match(self, soup):
         pattern = r'.*?window\.location\s*=\s*\"([^"]+)\"'
         redirMatch = re.match(pattern, str(soup), re.M | re.S)

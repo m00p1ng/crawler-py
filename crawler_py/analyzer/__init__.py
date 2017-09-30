@@ -48,6 +48,7 @@ class Analyzer:
         urls = [url for url in urls if self._filter_extension(url)]
         urls = [url for url in urls if self._filter_ignore_link(url)]
         urls = [url for url in urls if self._filter_long_filename(url)]
+        urls = [url for url in urls if urlparse(url).hostname]
 
         uniq_link = len(urls)
         skip_link = before_link - uniq_link
@@ -83,7 +84,6 @@ class Analyzer:
                 print_log(f"Skip URL {url}", 'yellow')
             db.error_log.add_log(url, "long_url")
         return not result
-
 
     def is_long_filename(self, url):
         url_resource = split_url(url).resource

@@ -10,6 +10,7 @@ from ..downloader import RobotFetcher
 link_cached = set()
 host_info_cached = set()
 
+
 class URLFilter:
     def __init__(self, urls):
         self.urls = urls
@@ -21,7 +22,6 @@ class URLFilter:
             print_log("URLs not found in robots.txt")
         else:
             print_log(f"Disallowed {disallowed_links} URLs", 'red')
-
 
         print_log("Filtering duplicated URLs...")
         duplicated_links = self.filter_duplicated()
@@ -36,7 +36,9 @@ class URLFilter:
         urls = []
         for url in self.urls:
             hostname = urlparse(url).netloc
-            if not hostname in host_info_cached and not self.check_host_info_exist(hostname):
+            if not hostname in host_info_cached and \
+                    not self.check_host_info_exist(hostname) and \
+                    urlparse(url).netloc:
                 db.host_info.insert_one({'hostname': hostname})
                 RobotFetcher(url).get()
                 if not self._is_disallowed(url):
@@ -69,7 +71,7 @@ class URLFilter:
         urls = []
         uniq_url = list(set(self.urls))
         copy_url = list(uniq_url)
-        
+
         for url in uniq_url:
             if not url in link_cached and not self.find_url(url):
                 urls.append(url)
@@ -82,7 +84,7 @@ class URLFilter:
         self.urls = urls
 
         return duplicated_links
-    
+
     def find_url(self, url):
         url_split = split_url(url)
         return db.queue.find_one({

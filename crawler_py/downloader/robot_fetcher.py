@@ -13,7 +13,7 @@ class RobotFetcher:
         self.scheme = urlparse(url).scheme
         if not self.scheme in ['http', 'https']:
             self.scheme = 'http'
-        self.robot_url = fill_http_prefix(self.scheme, self.hostname) 
+        self.robot_url = fill_http_prefix(self.scheme, self.hostname)
         self.robot_url = f'{self.robot_url}/robots.txt'
 
     def get(self):
@@ -33,8 +33,7 @@ class RobotFetcher:
                 rp.save()
                 print_log(f"Saved disallow links from {self.scheme}://{self.hostname}")
             else:
-                print_log(
-                    f"Not found robots.txt from {self.scheme}://{self.hostname}", 'yellow')
+                print_log(f"Not found robots.txt from {self.scheme}://{self.hostname}", 'yellow')
 
         except http.exceptions.ConnectionError:
             print_log(f"Cannot GET {self.scheme}://{self.hostname}/robots.txt", 'red')

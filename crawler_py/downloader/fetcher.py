@@ -2,8 +2,14 @@ import re
 
 from . import http
 from ..utils import print_log
+from ..urls import is_under_seed_root
 from ..database import Database as db
-from ..exceptions import PageNotFound, ContentTypeNotFound, ContentTypeNotAccepted
+from ..exceptions import (
+    PageNotFound,
+    ContentTypeNotFound,
+    ContentTypeNotAccepted,
+    RedirectOverSeedRoot
+)
 from ..settings import LIMIT_SITE, ACCEPTED_CONTENT_TYPES
 
 
@@ -23,8 +29,12 @@ class Fetcher:
                 raise PageNotFound
 
             print_log(f"GET content successful")
+            real_url = res.url
 
-            return self.check_content_type(res)
+            if not is_under_seed_root(real_url):
+                raise RedirectOverSeedRoot(real_url)
+
+            return (self.check_content_type(res), real_url)
 
         except http.exceptions.ConnectionError:
             print_log("Cannot GET content", 'red')
@@ -47,6 +57,9 @@ class Fetcher:
         except ContentTypeNotAccepted as e:
             content_type = e.content_type.strip("\"'")
             print_log(f"Content-type '{content_type}' Not Accepted", 'red')
+
+        except RedirectOverSeedRoot as e:
+            print_log(f"Redirect to {e.redir_url}", 'red')
 
     def check_content_type(self, response):
         if 'content-type' not in response.headers:

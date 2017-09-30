@@ -135,6 +135,9 @@ def is_ignore_link(url):
     else:
         return False, None
 
+
 def is_under_seed_root(url):
-    url_parse = urlparse(url)
-    return SEED_HOSTNAME in url_parse.netloc
+    hostname = urlparse(url).netloc
+    pattern = f'(.*\.{SEED_HOSTNAME}$)|(^{SEED_HOSTNAME}$)'
+    result = re.match(pattern, hostname)
+    return result
