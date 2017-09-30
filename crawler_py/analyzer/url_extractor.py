@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 from ..utils import print_log
 from ..urls import is_relative_path, split_url
 from ..settings import DEBUG, MAX_LEVEL
-from ..database import Database as db
 
 
 class URLExtractor:
@@ -40,8 +39,7 @@ class URLExtractor:
                 url = unquote(tag[attribute])
                 if is_relative_path(url):
                     url = urljoin(urlunparse(self.url_parse), url)
-                if (self._is_under_seed_root(url) and self._is_lower_max_level(url) and
-                        not self._is_long_filename(url)):
+                if self._is_under_seed_root(url) and self._is_lower_max_level(url):
                     urls.append(url)
                     if DEBUG:
                         print_log(f"Found '{url}'", 'cyan')
@@ -69,14 +67,3 @@ class URLExtractor:
         level = url_split.resource.split('/')
 
         return len(level) < MAX_LEVEL
-
-    def _is_long_filename(self, url):
-        url_split = split_url(url)
-        if len(url_split.resource) > 255:
-            if DEBUG:
-                print_log(f"Skip URL {url}", 'yellow')
-            else:
-                print_log(f"Skip Long URLs", 'yellow')
-            db.error_log.add_log(url, "long_url")
-            return True
-        return False

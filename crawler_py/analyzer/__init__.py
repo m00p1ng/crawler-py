@@ -5,8 +5,9 @@ from .content_filter import ContentFilter
 from .robots_parser import RobotsParser
 from .url_extractor import URLExtractor
 from .url_filter import URLFilter
+from ..database import Database as db
 from ..settings import SEED_HOSTNAME, DEBUG
-from ..urls import is_ignore_link
+from ..urls import is_ignore_link, split_url
 from ..utils import check_extension, print_log
 
 
@@ -46,6 +47,7 @@ class Analyzer:
         before_link = len(urls)
         urls = [url for url in urls if self._filter_extension(url)]
         urls = [url for url in urls if self._filter_ignore_link(url)]
+        urls = [url for url in urls if self._filter_long_filename(url)]
 
         uniq_link = len(urls)
         skip_link = before_link - uniq_link
@@ -73,3 +75,19 @@ class Analyzer:
             print_log(message, 'yellow')
 
         return not result
+
+    def _filter_long_filename(self, url):
+        result = self.is_long_filename(url)
+        if result:
+            if DEBUG:
+                print_log(f"Skip URL {url}", 'yellow')
+            db.error_log.add_log(url, "long_url")
+        return not result
+
+
+    def is_long_filename(self, url):
+        url_resource = split_url(url).resource
+        filename = url_resource.strip('/').split('/')[-1]
+        if len(filename) > 255:
+            return True
+        return False

@@ -6,7 +6,11 @@ import os
 import re
 from collections import namedtuple
 from urllib.parse import urlparse
-from .settings import IGNORE_WORD_LIST, DEBUG
+from .settings import IGNORE_WORD_LIST
+
+
+SplitResult = namedtuple('SplitResult', ['hostname', 'resource'])
+FilePath = namedtuple('FilePath', ['path', 'filename'])
 
 
 def fill_http_prefix(url):
@@ -130,7 +134,3 @@ def is_ignore_link(url):
         return True, result.group(1)
     else:
         return False, None
-
-
-SplitResult = namedtuple('SplitResult', ['hostname', 'resource'])
-FilePath = namedtuple('FilePath', ['path', 'filename'])

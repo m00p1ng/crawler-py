@@ -61,13 +61,7 @@ class URLFilter:
         copy_url = list(uniq_url)
         
         for url in uniq_url:
-            if url in link_cached:
-                if DEBUG:
-                    print_log(f"Duplicated '{url}'", 'yellow')
-                continue
-
-            result = self.find_url(url)
-            if not result:
+            if not url in link_cached and not self.find_url(url):
                 urls.append(url)
             else:
                 if DEBUG:

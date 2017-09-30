@@ -45,7 +45,8 @@ class Fetcher:
             print_log("Content-type Not Found", 'red')
 
         except ContentTypeNotAccepted as e:
-            print_log(f"Content-type '{e.content_type}' Not Accepted", 'red')
+            content_type = e.content_type.strip("\"'")
+            print_log(f"Content-type '{content_type}' Not Accepted", 'red')
 
     def check_content_type(self, response):
         if 'content-type' not in response.headers:

@@ -33,6 +33,8 @@ IGNORE_WORD_LIST = [
     "download",
     "login",
     "logout",
+    "comment",
+    "format=pdf",
     "#",
 ]
 
