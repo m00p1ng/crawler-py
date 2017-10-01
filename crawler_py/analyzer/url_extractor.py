@@ -25,7 +25,7 @@ class URLExtractor:
             urls.append(meta_url)
         urls += self._find_tag(soup, 'a', 'href')
 
-        if len(urls) > 0:
+        if urls:
             print_log(f"Found {len(urls)} URLs", 'cyan')
         else:
             print_log(f"Not Found URLs", 'yellow')

@@ -24,17 +24,17 @@ EXTRACT_EXTENSIONS = [
 ]
 
 IGNORE_WORD_LIST = [
-    "image",
-    "photo",
-    "picture",
-    "gallery",
     "album",
-    "mailto",
-    "download",
-    "login",
-    "logout",
     "comment",
     "format=pdf",
+    "gallery",
+    "image",
+    "login",
+    "logout",
+    "mailto",
+    "photo",
+    "pics",
+    "picture",
     "#",
 ]
 

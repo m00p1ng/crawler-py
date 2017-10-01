@@ -22,5 +22,5 @@ def check_extension(filename):
         (bool): if in EXTRACT_EXTENSIONS return True
     '''
     extension = os.path.splitext(filename)[1].lower()
-    if extension in EXTRACT_EXTENSIONS or extension is '':
+    if extension in EXTRACT_EXTENSIONS or extension == '':
         return True

@@ -5,7 +5,7 @@ URL management module
 import os
 import re
 from collections import namedtuple
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 from .settings import IGNORE_WORD_LIST, SEED_HOSTNAME
 
 
@@ -132,12 +132,22 @@ def is_ignore_link(url):
     result = re.match(pattern, url, re.IGNORECASE)
     if result:
         return True, result.group(1)
-    else:
-        return False, None
+    return False, None
 
 
 def is_under_seed_root(url):
     hostname = urlparse(url).netloc
-    pattern = f'(.*\.{SEED_HOSTNAME}$)|(^{SEED_HOSTNAME}$)'
+    pattern = f'(.*[.]{SEED_HOSTNAME}$)|(^{SEED_HOSTNAME}$)'
     result = re.match(pattern, hostname)
     return result
+
+
+def url_encode(url):
+    return quote(url, safe=":=&?/'\"")
+
+
+def is_redirect(req_url, res_url):
+    req = req_url.strip('/')
+    req = url_encode(req)
+    res = res_url.strip('/')
+    return req != res

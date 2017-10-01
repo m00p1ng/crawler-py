@@ -11,7 +11,7 @@ class RobotFetcher:
     def __init__(self, url):
         self.hostname = urlparse(url).netloc
         self.scheme = urlparse(url).scheme
-        if not self.scheme in ['http', 'https']:
+        if self.scheme not in ['http', 'https']:
             self.scheme = 'http'
         self.robot_url = fill_http_prefix(self.scheme, self.hostname)
         self.robot_url = f'{self.robot_url}/robots.txt'

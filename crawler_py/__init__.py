@@ -2,7 +2,7 @@ import sys
 import time
 
 from .utils import print_log
-from .urls import fill_http_prefix
+from .urls import fill_http_prefix, is_redirect, url_encode
 from .database import Database as db
 from .settings import DATABASE_NAME, LIMIT_SITE, DELAY_FETCH
 
@@ -41,7 +41,16 @@ def crawler():
             link_counter = db.crawler_state.link_counter
             url = schedule.get_url()
 
-            content = Fetcher(url).get_content()
+            content = None
+            real_url = None
+            fetch = Fetcher(url).get_content()
+            if fetch:
+                content, real_url = fetch
+
+            if real_url and is_redirect(url, real_url):
+                with open("redirect.txt", "a") as file:
+                    file.write(f'URL : {url}\n')
+                    file.write(f'RURL: {real_url}\n\n')
 
             if content is not None:
                 analyzer = Analyzer(url, content)

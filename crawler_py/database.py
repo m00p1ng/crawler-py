@@ -78,19 +78,19 @@ class Database:
     @classmethod
     def _connect(cls, db_name):
         if not os.path.exists(DATABASE_CONFIG_PATH):
-            MONGO = {}
-            MONGO['HOST'] = 'localhost'
-            MONGO['PORT'] = 27017
+            mongo = {}
+            mongo['HOST'] = 'localhost'
+            mongo['PORT'] = 27017
         else:
             with open(DATABASE_CONFIG_PATH, 'r') as file:
-                MONGO = json.loads(file.read())
+                mongo = json.loads(file.read())
 
-        cls._client = MongoClient(MONGO['HOST'], MONGO['PORT'])
+        cls._client = MongoClient(mongo['HOST'], mongo['PORT'])
         cls._client.server_info()
 
         db = cls._client[db_name]
-        if 'USERNAME' in MONGO and 'PASSWORD' in MONGO:
-            db.authenticate(MONGO['USERNAME'], MONGO['PASSWORD'])
+        if 'USERNAME' in mongo and 'PASSWORD' in mongo:
+            db.authenticate(mongo['USERNAME'], mongo['PASSWORD'])
 
         return db
 

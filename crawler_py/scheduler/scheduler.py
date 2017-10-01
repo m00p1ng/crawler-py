@@ -1,3 +1,4 @@
+'''Scheduler Module'''
 from urllib.parse import urljoin, urlparse
 
 from ..database import Database as db
@@ -67,7 +68,7 @@ class Scheduler:
         for url in urls:
             url_split = split_url(url)
             scheme = urlparse(url).scheme
-            if not scheme:
+            if not scheme or scheme not in ['http', 'https']:
                 scheme = "http"
             hostname = url_split.hostname
             resource = '/' + url_split.resource.strip('/')

@@ -1,8 +1,8 @@
 import sys
 import os.path
 
-path = os.path.realpath(os.path.abspath(__file__))
-sys.path.insert(0, os.path.dirname(os.path.dirname(path)))
+PATH = os.path.realpath(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(PATH)))
 
 import crawler_py
 
