@@ -1,4 +1,5 @@
 import re
+from urllib.parse import unquote
 
 from . import http
 from ..utils import print_log
@@ -29,7 +30,7 @@ class Fetcher:
                 raise PageNotFound
 
             print_log(f"GET content successful")
-            real_url = res.url
+            real_url = unquote(res.url).strip('/')
 
             if not is_under_seed_root(real_url):
                 raise RedirectOverSeedRoot(real_url)

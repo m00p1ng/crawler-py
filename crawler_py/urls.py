@@ -5,7 +5,7 @@ URL management module
 import os
 import re
 from collections import namedtuple
-from urllib.parse import urlparse, quote
+from urllib.parse import urlparse, quote, unquote
 from .settings import IGNORE_WORD_LIST, SEED_HOSTNAME
 
 
@@ -128,8 +128,7 @@ def url_to_path(url):
 
 def is_ignore_link(url):
     pattern = '|'.join(IGNORE_WORD_LIST)
-    pattern = f'.*({pattern}).*'
-    result = re.match(pattern, url, re.IGNORECASE)
+    result = re.search(pattern, split_url(url).resource, re.IGNORECASE)
     if result:
         return True, result.group(1)
     return False, None
@@ -147,7 +146,13 @@ def url_encode(url):
 
 
 def is_redirect(req_url, res_url):
-    req = req_url.strip('/')
-    req = url_encode(req)
-    res = res_url.strip('/')
-    return req != res
+    req_split = split_url(req_url.strip('/'))
+    res_split = split_url(res_url.strip('/'))
+
+    req_hostname = remove_www_prefix(req_split.hostname)
+    res_hostname = remove_www_prefix(res_split.hostname)
+
+    req_resource = unquote(req_split.resource)
+    res_resource = unquote(res_split.resource)
+
+    return req_hostname != res_hostname or req_resource != res_resource

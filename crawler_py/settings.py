@@ -25,7 +25,9 @@ EXTRACT_EXTENSIONS = [
 
 IGNORE_WORD_LIST = [
     "album",
+    "attach",
     "comment",
+    "download",
     "format=pdf",
     "gallery",
     "image",

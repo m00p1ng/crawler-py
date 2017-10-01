@@ -48,9 +48,7 @@ def crawler():
                 content, real_url = fetch
 
             if real_url and is_redirect(url, real_url):
-                with open("redirect.txt", "a") as file:
-                    file.write(f'URL : {url}\n')
-                    file.write(f'RURL: {real_url}\n\n')
+                print_log("==> Redirect to {real_url}", 'yellow')
 
             if content is not None:
                 analyzer = Analyzer(url, content)
