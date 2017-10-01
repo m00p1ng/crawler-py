@@ -16,9 +16,9 @@ def save(url, content):
     pure_filename = url_parse.path.split('/')[-1]
     file_save_path = _check_filepath_exist(save_path, pure_filename, url_parse)
 
-    with open(file_save_path, 'w') as file:
-        file.write(content)
-
+    file = open(file_save_path, 'w')
+    file.write(content)
+    file.close()
 
 def _check_filepath_exist(save_path, pure_filename, url_parse):
     save_filename = join_modifier_url(pure_filename, url_parse)

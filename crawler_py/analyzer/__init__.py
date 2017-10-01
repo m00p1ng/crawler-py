@@ -6,7 +6,7 @@ from .robots_parser import RobotsParser
 from .url_extractor import URLExtractor
 from .url_filter import URLFilter
 from ..database import Database as db
-from ..settings import SEED_HOSTNAME, DEBUG
+from ..settings import SEED_HOSTNAME, DEBUG, MAX_LENGTH_FILENAME
 from ..urls import is_ignore_link, split_url
 from ..utils import check_extension, print_log
 
@@ -88,6 +88,6 @@ class Analyzer:
     def is_long_filename(self, url):
         url_resource = split_url(url).resource
         filename = url_resource.strip('/').split('/')[-1]
-        if len(filename) > 255:
+        if len(filename) > MAX_LENGTH_FILENAME:
             return True
         return False

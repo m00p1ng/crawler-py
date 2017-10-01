@@ -24,8 +24,13 @@ class ContentFilter:
             self._save_hash(hash_, False)
             print_log("Added hash to database")
 
-            storage.save(url, self.content)
-            print_log("Stored content to disk")
+            try:
+                storage.save(url, self.content)
+                print_log("Stored content to disk")
+            except OSError as exc:
+                if exc.errno == 36:
+                    print_log("Filename too long: Cannot save file", 'red')
+
             content_cached.add(hash_)
             return False
         else:

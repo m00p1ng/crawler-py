@@ -48,7 +48,7 @@ def crawler():
                 content, real_url = fetch
 
             if real_url and is_redirect(url, real_url):
-                print_log("==> Redirect to {real_url}", 'yellow')
+                print_log(f"==> Redirect to {real_url}", 'yellow')
 
             if content is not None:
                 analyzer = Analyzer(url, content)
