@@ -62,7 +62,9 @@ class URLExtractor:
 
     def _meta_redirect(self, soup):
         result = soup.find("meta", attrs={"http-equiv": "Refresh"})
-        if result:
+        if result and hasattr(result, 'content'):
+            if result['content'].find(';') == -1:
+                return None
             _, text = result["content"].split(";")
             if text.strip().lower().startswith("url="):
                 url = text[4:]
