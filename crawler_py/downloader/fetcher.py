@@ -2,7 +2,7 @@ import re
 from urllib.parse import unquote
 
 from . import http
-from ..utils import print_log
+from ..utils import print_log, convert_size
 from ..urls import is_under_seed_root
 from ..database import Database as db
 from ..exceptions import (
@@ -29,7 +29,7 @@ class Fetcher:
                 db.queue.update_visited_link(self.url)
                 raise PageNotFound
 
-            print_log(f"GET content successful")
+            print_log(f"GET content successful ({convert_size(len(res.content))})")
             real_url = unquote(res.url).strip('/')
 
             if not is_under_seed_root(real_url):
